@@ -1,0 +1,23 @@
+.navbar-section {
+  .navbar {
+    padding: 20px 0;
+    .navlist {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    .wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      font-size: 20px;
+    }
+    a {
+      color: black;
+    }
+  }
+}
