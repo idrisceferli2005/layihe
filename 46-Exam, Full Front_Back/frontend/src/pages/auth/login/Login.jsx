@@ -13,22 +13,24 @@ const Login = () => {
 
   const submitForm = async (values, actions) => {
     try {
-      const res = await axios.post(`${baseUrl}/login`, values);
-
+      const res = await axios.post("http://localhost:5000/auth/login", values, {
+        withCredentials: true, // 🚀 Cookie-lərin saxlanmasını aktiv edin
+      });
+  
       if (res.status === 200) {
-        dispatch(setUser(res.data));
+        dispatch(setUser(res.data)); // 🚀 İstifadəçini Redux-a yazın
         alert("Login successful");
+        navigate("/");
       } else {
         alert("Login failed");
       }
-
+  
       actions.resetForm();
-
-      navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
+  
 
   const { values, handleChange, handleSubmit, errors } = useFormik({
     initialValues: {

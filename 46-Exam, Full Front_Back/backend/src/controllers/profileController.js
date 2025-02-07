@@ -1,12 +1,11 @@
 import User from "../models/userModel.js";
 
-
-
 export const getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.params._id).select("-password");
+    // req.params.id ilə istifadəçinin ID-sini əldə et
+    const user = await User.findById(req.params.id).select("-password");
     if (!user) {
-      return res.status(404).json({ message: `User with ID ${req.params._id} not found` });
+      return res.status(404).json({ message: `User with ID ${req.params.id} not found` });
     }
     res.status(200).json(user);
   } catch (error) {
@@ -14,12 +13,12 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-
 export const updateUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.params._id).select("-password");
+    // req.params.id ilə istifadəçinin ID-sini əldə et
+    const user = await User.findById(req.params.id).select("-password");
     if (!user) {
-      return res.status(404).json({ message: `User with ID ${req.params._id} not found` });
+      return res.status(404).json({ message: `User with ID ${req.params.id} not found` });
     }
 
     user.name = req.body.name || user.name;

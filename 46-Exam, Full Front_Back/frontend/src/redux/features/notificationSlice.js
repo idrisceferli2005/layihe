@@ -3,12 +3,14 @@ import axios from "axios";
 
 export const fetchNotifications = createAsyncThunk(
   "notifications/fetchNotifications",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const token = getState().user.token;
+      const token = localStorage.getItem("token");
+      console.log("Sending Token in Header:", token);
       const response = await axios.get("http://localhost:5000/api/notifications", {
+        withCredentials: true,
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token ? `Bearer ${token}` : "",
         },
       });
       return response.data;

@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.scss";
 import logoImg from "../../assets/images/logo.png.webp";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { FaUserCircle } from "react-icons/fa";
-import { logoutUser } from "../../redux/features/UserSlice";
+import { loginUser, logoutUser } from "../../redux/features/UserSlice";
 
 const Navbar = () => {
   const baseUrl = "http://localhost:5000/auth";
@@ -22,11 +22,13 @@ const Navbar = () => {
     if (res.status === 200) {
       dispatch(logoutUser())
       alert("Logout successful");
-      history.pushState('/login');
     } else {
       alert("Logout failed");
     }
   };
+  useEffect(() => {
+  loginUser()
+  } , [dispatch])
 
   
   return (
@@ -64,9 +66,15 @@ const Navbar = () => {
             <li className="navlist-item">
               <Link to="/posts">Posts</Link>
             </li>
-            <li>
-              <Link to="/profile"><FaUserCircle /></Link>
-            </li>
+            {user && user.existUser && user.existUser._id ? (
+  <li>
+   <Link to={`/profile/${user && user.existUser ? user.existUser._id : ''}`}>
+  <FaUserCircle />
+</Link>
+  </li>
+) : (
+  <span>User profile not available</span>
+)}
           </ul>
           <div className="wrapper">
   
@@ -77,7 +85,7 @@ const Navbar = () => {
                 data-bs-toggle="dropdown"
               >
                 <i className="fa-solid fa-user"></i>
-                {user ? user.existUser.username : "User"}
+                {user && user.existUser ? user.existUser.username : "User"}
               </button>
               <ul className="dropdown-menu">
                 {user ? (

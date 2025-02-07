@@ -8,7 +8,7 @@ export const loginUser = createAsyncThunk(
       const response = await axios.post("http://localhost:5000/auth/login", userData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "An error occurred");
+      return rejectWithValue(error.response?.data?.message || error.message || "An error occurred");
     }
   }
 );
@@ -17,7 +17,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     user: null,
-    token: null,
+    token: localStorage.getItem("token") || null, // 📌 Token loaded from localStorage
     loading: false,
     error: null,
   },
@@ -28,6 +28,7 @@ const userSlice = createSlice({
     logoutUser: (state) => {
       state.user = null;
       state.token = null;
+      localStorage.removeItem("token"); // Clear token from localStorage
     },
   },
   extraReducers: (builder) => {
@@ -38,8 +39,9 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.existUser;
+        state.user = action.payload.existUser || {}; // Safeguard in case of undefined
         state.token = action.payload.token;
+        localStorage.setItem("token", action.payload.token); // Store token in localStorage
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

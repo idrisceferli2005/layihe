@@ -6,7 +6,9 @@ export const fetchPosts = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const token = getState().user.token;
-      const response = await axios.get("http://localhost:5001/api/posts", {
+      console.log("Access Token:", token);
+      const response = await axios.get("http://localhost:5000/api/posts", {
+        withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -23,7 +25,8 @@ export const createPost = createAsyncThunk(
   async (postData, { getState, rejectWithValue }) => {
     try {
       const token = getState().user.token;
-      const response = await axios.post("http://localhost:5001/api/posts", postData, {
+      const response = await axios.post("http://localhost:5000/api/posts", postData, {
+        withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -40,7 +43,8 @@ export const createComment = createAsyncThunk(
   async ({ postId, commentData }, { getState, rejectWithValue }) => {
     try {
       const token = getState().user.token;
-      const response = await axios.post(`http://localhost:5001/api/posts/${postId}/comments`, commentData, {
+      const response = await axios.post(`http://localhost:5000/api/posts/${postId}/comments`, commentData, {
+        withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
         },

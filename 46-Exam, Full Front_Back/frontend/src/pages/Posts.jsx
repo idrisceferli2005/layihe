@@ -12,6 +12,7 @@ const Posts = () => {
   useEffect(() => {
     dispatch(fetchPosts());
   }, [dispatch]);
+  console.log(posts)
 
   const handleSubmit = (e) => {
     e.preventDefault();
