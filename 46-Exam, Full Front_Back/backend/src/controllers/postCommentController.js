@@ -43,3 +43,31 @@ export const getPosts = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const deleteComment = async (req, res) => {
+  try {
+    const { postId, commentId } = req.params;
+
+    // Postu tap
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post tapılmadı" });
+    }
+
+    // Şərhi tap və sil
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Şərh tapılmadı" });
+    }
+
+    await Comment.findByIdAndDelete(commentId);
+
+    // Postun içində olan şərhlərdən silirik
+    post.comments = post.comments.filter((c) => c.toString() !== commentId);
+    await post.save();
+
+    res.json({ message: "Şərh uğurla silindi" });
+  } catch (error) {
+    res.status(500).json({ message: "Server xətası" });
+  }
+};

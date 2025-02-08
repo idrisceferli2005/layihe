@@ -11,6 +11,10 @@ export const sendFriendRequest = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    if (user.friends.includes(friendId)) {
+      return res.status(400).json({ message: "Friend request already sent" });
+    }
+
     user.friends.push(friendId);
     await user.save();
 
@@ -31,6 +35,10 @@ export const acceptFriendRequest = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    if (!user.friends.includes(friendId)) {
+      return res.status(400).json({ message: "Friend request not found" });
+    }
+
     user.friends.push(friendId);
     friend.friends.push(userId);
     await user.save();
@@ -39,5 +47,102 @@ export const acceptFriendRequest = async (req, res) => {
     res.status(200).json({ message: "Friend request accepted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// Dostluq sorğusunu rədd et
+export const declineFriendRequest = async (req, res) => {
+  try {
+    const { userId, friendId } = req.body;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.friends = user.friends.filter(id => id.toString() !== friendId);
+    await user.save();
+
+    res.status(200).json({ message: "Friend request declined" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Dostluqdan çıxar
+export const removeFriend = async (req, res) => {
+  try {
+    const { userId, friendId } = req.body;
+    const user = await User.findById(userId);
+    const friend = await User.findById(friendId);
+
+    if (!user || !friend) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.friends = user.friends.filter(id => id.toString() !== friendId);
+    friend.friends = friend.friends.filter(id => id.toString() !== userId);
+    await user.save();
+    await friend.save();
+
+    res.status(200).json({ message: "Friend removed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// İstifadəçini izləmək
+export const followUser = async (req, res) => {
+  try {
+    const { userId, followId } = req.body;
+
+    const userToFollow = await User.findById(followId);
+    const currentUser = await User.findById(userId);
+
+    if (!userToFollow || !currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (currentUser.following.includes(followId)) {
+      return res.status(400).json({ message: "You are already following this user" });
+    }
+
+    currentUser.following.push(followId);
+    userToFollow.followers.push(userId);
+
+    await currentUser.save();
+    await userToFollow.save();
+
+    return res.status(200).json({ message: "User followed successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// İstifadəçini izləməkdən çıxmaq
+export const unfollowUser = async (req, res) => {
+  try {
+    const { userId, unfollowId } = req.body;
+
+    const userToUnfollow = await User.findById(unfollowId);
+    const currentUser = await User.findById(userId);
+
+    if (!userToUnfollow || !currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!currentUser.following.includes(unfollowId)) {
+      return res.status(400).json({ message: "You are not following this user" });
+    }
+
+    currentUser.following = currentUser.following.filter(id => id.toString() !== unfollowId);
+    userToUnfollow.followers = userToUnfollow.followers.filter(id => id.toString() !== userId);
+
+    await currentUser.save();
+    await userToUnfollow.save();
+
+    return res.status(200).json({ message: "User unfollowed successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };

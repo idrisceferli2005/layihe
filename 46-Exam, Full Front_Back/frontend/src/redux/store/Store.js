@@ -6,6 +6,7 @@ import userSlice from "../features/UserSlice";
 import profileSlice from "../features/profileSlice";
 import notificationSlice from "../features/notificationSlice";
 import postSlice from "../features/postSlice";
+import friendSlice from "../features/friendSlice";
 
 
 
@@ -58,6 +59,7 @@ export const store = configureStore({
     profile: persistedProfileReducer,
     notifications: persistedNotificationReducer,
     posts: postSlice,
+    friends: friendSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -15,7 +15,7 @@ import Profile from "./pages/profile/Profile";
 import ErrorBoundary from "./pages/ErrorBoundary";
 import Search from "./pages/Search";
 import Notifications from "./pages/Notifications";
-import Posts from "./pages/Posts";
+import Posts from "./pages/post/Posts";
 
 const router = createBrowserRouter([
   {

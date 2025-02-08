@@ -56,6 +56,24 @@ export const createComment = createAsyncThunk(
   }
 );
 
+export const deleteComment = createAsyncThunk(
+  "posts/deleteComment",
+  async ({ postId, commentId }, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().user.token;
+      await axios.delete(`http://localhost:5000/api/posts/${postId}/comments/${commentId}`, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return { postId, commentId };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "An error occurred");
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "posts",
   initialState: {
@@ -104,6 +122,14 @@ const postSlice = createSlice({
       .addCase(createComment.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(deleteComment.fulfilled, (state, action) => {
+        const postIndex = state.posts.findIndex(post => post._id === action.payload.postId);
+        if (postIndex !== -1) {
+          state.posts[postIndex].comments = state.posts[postIndex].comments.filter(
+            (comment) => comment._id !== action.payload.commentId
+          );
+        }
       });
   },
 });

@@ -38,7 +38,14 @@ const profileSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+    logoutUser: (state) => {
+      state.user = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Profil yükləmək
@@ -71,4 +78,5 @@ const profileSlice = createSlice({
   },
 });
 
+export const { setUser, logoutUser } = profileSlice.actions;
 export default profileSlice.reducer;
