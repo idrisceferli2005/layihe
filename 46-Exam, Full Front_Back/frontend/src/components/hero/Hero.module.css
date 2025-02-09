@@ -30,7 +30,7 @@
   border: 1px solid #dbdbdb;
   border-radius: 8px;
   padding: 10px;
-  background-color: #f9f9f9;
+  background-color: #fff;
 }
 
 .post img {
@@ -65,4 +65,61 @@
 
 .comment-form button:hover {
   background-color: #007bb5;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.userImage {
+  width: 40px; /* Kiçik ölçü */
+  height: 40px; /* Kiçik ölçü */
+  border-radius: 50%; /* Yuvarlaq şəkil */
+  margin-right: 10px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.actions button {
+  margin-right: 10px;
+}
+
+.comment-form {
+  margin-top: 10px;
+}
+
+.comments {
+  list-style: none;
+  padding: 0;
+}
+
+.comments li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.comments li:last-child {
+  border-bottom: none;
+}
+
+.comments .btn-danger {
+  background-color: #ff4d4d;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comments .btn-danger:hover {
+  background-color: #ff1a1a;
 }

@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchProfile, updateProfile, setUser, logoutUser } from "../../redux/features/profileSlice";
 import styles from "./Profile.module.css";
+import { fetchUserPosts } from "../../redux/features/postSlice";
 
 const Profile = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, loading, error } = useSelector((state) => state.profile);
+  const { posts } = useSelector((state) => state.posts);
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -21,6 +23,7 @@ const Profile = () => {
     if (id) {
       console.log(`Fetching profile for id: ${id}`);
       dispatch(fetchProfile(id));
+      dispatch(fetchUserPosts(id));
     } else {
       console.error("ID is undefined");
     }
@@ -41,11 +44,22 @@ const Profile = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, image: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateProfile({ id, user: formData })).then(() => {
-      dispatch(logoutUser()); // Profil yeniləndikdən sonra istifadəçidən çıxış edin
-      navigate("/login"); // Profil yeniləndikdən sonra login səhifəsinə yönləndirin
+      dispatch(logoutUser()); 
+      navigate("/login");
     });
   };
 
@@ -67,8 +81,9 @@ const Profile = () => {
           <h2>{formData.username}</h2>
           <p>{formData.name}</p>
           <p>{formData.email}</p>
-          <p>Followers: {user.followers.length}</p>
-          <p>Following: {user.following.length}</p>
+          <p>Followers: {user.followers?.length }</p>
+          <p>Following: {user.following?.length}</p>
+          <p>Posts: {user.posts?.length }</p>
         </div>
       </div>
       {isEditing && (
@@ -87,19 +102,23 @@ const Profile = () => {
           </div>
           <div className={styles.formGroup}>
             <label>Image</label>
-            <input type="text" name="image" value={formData.image} onChange={handleChange} />
+            <input type="file" name="image" onChange={handleFileChange} />
           </div>
           <button className={styles.button} type="submit">Update Profile</button>
         </form>
       )}
-      <div className={styles.posts}>
-        {user.posts?.map((post) => (
-          <div key={post._id} className={styles.post}>
-            <p>{post.content}</p>
-            {post.image && <img src={post.image} alt="Post" />}
-          </div>
-        ))}
+<div className={styles.posts}>
+  {posts?.length > 0 ? (
+    posts.map((post) => (
+      <div key={post._id} className={styles.post}>
+        <p>{post.content}</p>
+        {post.image && <img src={post.image} alt="Post" />}
       </div>
+    ))
+  ) : (
+    <p>Post yoxdur.</p>
+  )}
+</div>
     </div>
   );
 };

@@ -34,13 +34,27 @@ export const createComment = async (req, res) => {
   }
 };
 
-// Postları əldə et
+// Bütün postları əldə et
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.find().populate("user").populate("comments");
     res.status(200).json(posts);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+// İstifadəçinin postlarını əldə et
+export const getUserPosts = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const posts = await Post.find({ user: userId }); // userId ilə postları tapırıq
+    if (posts.length === 0) {
+      return res.status(404).json({ message: "No posts found for this user." });
+    }
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 

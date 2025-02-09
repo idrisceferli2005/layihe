@@ -74,6 +74,25 @@ export const deleteComment = createAsyncThunk(
   }
 );
 
+export const fetchUserPosts = createAsyncThunk(
+  "posts/fetchUserPosts",
+  async (userId, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().user.token;
+      const response = await axios.get(`http://localhost:5173/api/posts/user/${userId}`, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "An error occurred");
+    }
+  }
+);
+
+
 const postSlice = createSlice({
   name: "posts",
   initialState: {

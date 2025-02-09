@@ -2,8 +2,10 @@ import User from "../models/userModel.js";
 
 export const getUserProfile = async (req, res) => {
   try {
-    // req.params.id ilə istifadəçinin ID-sini əldə et
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findById(req.params.id)
+    .populate("posts") 
+    .populate("followers")
+    .populate("following");
     if (!user) {
       return res.status(404).json({ message: `User with ID ${req.params.id} not found` });
     }
@@ -15,12 +17,11 @@ export const getUserProfile = async (req, res) => {
 
 export const updateUserProfile = async (req, res) => {
   try {
-    // req.params.id ilə istifadəçinin ID-sini əldə et
+
     const user = await User.findById(req.params.id).select("-password");
     if (!user) {
       return res.status(404).json({ message: `User with ID ${req.params.id} not found` });
     }
-
     user.name = req.body.name || user.name;
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;

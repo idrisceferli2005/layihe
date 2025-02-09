@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts, createComment, deleteComment } from "../../redux/features/postSlice";
+import { Link } from "react-router-dom";
 import styles from "./Hero.module.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-solid-svg-icons';
 
 const Hero = () => {
   const dispatch = useDispatch();
   const { posts, loading, error } = useSelector((state) => state.posts);
+  const { user } = useSelector((state) => state.user); // İstifadəçi məlumatlarını əldə edin
   const [commentContent, setCommentContent] = useState({});
 
   useEffect(() => {
@@ -35,10 +39,23 @@ const Hero = () => {
       <div className={styles.postsGrid}>
         {posts.map((post) => (
           <div key={post._id} className={styles.post}>
-            <p>{post.content}</p>
+            <div className={styles.userInfo}>
+              <Link to={`/profile/${post.user._id}`}>
+                <img src={post.user.image} alt={post.user.username} className={styles.userImage} />
+              </Link>
+              <Link to={`/profile/${post.user._id}`}>
+                <span>{post.user.username}</span>
+              </Link>
+            </div>
             {post.image && <img src={post.image} alt="Post" />}
-            <ul>
-              {post.comments.map((comment) => (
+            <p>{post.content}</p>
+            <div className={styles.actions}>
+              <button onClick={() => handleLike(post._id)}>Like</button>
+              <button onClick={() => handleUnlike(post._id)}>Unlike</button>
+              <span>{post.likes?.length || 0} Likes</span>
+            </div>
+            <ul className={styles.comments}>
+              {post.comments?.map((comment) => (
                 <li key={comment._id}>
                   {comment.content}
                   <button className="btn btn-danger" onClick={() => handleCommentDelete(post._id, comment._id)}>Delete</button>
@@ -58,7 +75,10 @@ const Hero = () => {
                 onChange={(e) => handleCommentChange(post._id, e.target.value)}
                 placeholder="Write a comment..."
               />
-              <button type="submit">Comment</button>
+              <button type="submit">
+                <FontAwesomeIcon icon={faComment} />
+                Comment
+              </button>
             </form>
           </div>
         ))}
