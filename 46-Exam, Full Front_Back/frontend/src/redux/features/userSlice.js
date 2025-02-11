@@ -1,6 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// Cookie-dən token oxumaq üçün funksiya
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+};
+
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (userData, { rejectWithValue }) => {
@@ -17,7 +25,7 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     user: null,
-    token: localStorage.getItem("token") || null, // 📌 Token loaded from localStorage
+    token: getCookie("token") || null, 
     loading: false,
     error: null,
   },
@@ -28,7 +36,7 @@ const userSlice = createSlice({
     logoutUser: (state) => {
       state.user = null;
       state.token = null;
-      localStorage.removeItem("token"); // Clear token from localStorage
+      document.cookie = "token=; Max-Age=-99999999;"; 
     },
   },
   extraReducers: (builder) => {
@@ -41,7 +49,7 @@ const userSlice = createSlice({
         state.loading = false;
         state.user = action.payload.existUser || {}; // Safeguard in case of undefined
         state.token = action.payload.token;
-        localStorage.setItem("token", action.payload.token); // Store token in localStorage
+        document.cookie = `token=${action.payload.token}; path=/`; // Token-i cookie-yə yazırıq
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

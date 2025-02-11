@@ -29,6 +29,11 @@ const persistNotificationConfig = {
   key: "notification",
   storage,
 };
+const persistPostConfig = {
+  key: "posts",
+  storage,
+};
+2
 
 const persistedProductReducer = persistReducer(
   persistProductConfig,
@@ -49,6 +54,10 @@ const persistedNotificationReducer = persistReducer(
   notificationSlice
 );
 
+const persistedPostReducer = persistReducer(
+  persistPostConfig,
+  postSlice
+);
 
 
 
@@ -58,7 +67,7 @@ export const store = configureStore({
     user: persistedUserReducer,
     profile: persistedProfileReducer,
     notifications: persistedNotificationReducer,
-    posts: postSlice,
+    posts: persistedPostReducer,
     friends: friendSlice,
   },
   middleware: (getDefaultMiddleware) =>

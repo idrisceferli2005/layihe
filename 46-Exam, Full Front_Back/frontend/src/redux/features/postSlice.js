@@ -79,7 +79,7 @@ export const fetchUserPosts = createAsyncThunk(
   async (userId, { getState, rejectWithValue }) => {
     try {
       const token = getState().user.token;
-      const response = await axios.get(`http://localhost:5173/api/posts/user/${userId}`, {
+      const response = await axios.get(`http://localhost:5000/api/posts/user/${userId}`, {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -110,6 +110,18 @@ const postSlice = createSlice({
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.loading = false;
         state.posts = action.payload;
+      })
+      .addCase(fetchUserPosts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserPosts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.posts = action.payload; 
+      })
+      .addCase(fetchUserPosts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.loading = false;

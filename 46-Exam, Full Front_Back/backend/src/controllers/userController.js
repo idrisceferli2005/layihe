@@ -7,6 +7,8 @@ import RegisterValidationSchema from "../middleware/validation/RegisterValidatio
 import LoginValidationSchema from "../middleware/validation/LoginValidation.js";
 import ForgotValidationSchema from "../middleware/validation/ForgotValidation.js";
 import ResetValidationSchema from "../middleware/validation/ResetValidation.js";
+import Post from "../models/postModel.js";
+import User from "../models/userModel.js";
 
 export const register = async (req, res) => {
   try {
@@ -171,6 +173,37 @@ export const resetPassword = async (req, res) => {
     await existUser.save();
 
     return res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const createPost = async (req, res) => {
+  try {
+    const { content } = req.body;
+    const { filename } = req.file; // Yüklənmiş faylın adı
+    const imageUrl = `uploads/${filename}`.replace(/\\/g, "/");
+
+    // Yeni postu yarat
+    const newPost = new Post({
+      user: req.user.id, // Giriş edən istifadəçinin ID-sini req.user-dən al
+      content,
+      image: imageUrl, // Faylın URL-ni saxla
+    });
+
+    await newPost.save();
+
+    // İstifadəçinin posts array-ını yenilə
+    await User.findByIdAndUpdate(
+      req.user.id,
+      { $push: { posts: newPost._id } },
+      { new: true }
+    );
+
+    return res.status(201).json({
+      message: "Post yaradıldı",
+      post: newPost,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

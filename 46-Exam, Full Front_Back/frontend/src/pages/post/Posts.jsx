@@ -18,6 +18,8 @@ const Posts = () => {
     navigate("/"); // Post paylaşandan sonra ana səhifəyə yönləndir
   };
 
+  
+
   return (
     <div className={styles.container}>
       <h1>Create a Post</h1>

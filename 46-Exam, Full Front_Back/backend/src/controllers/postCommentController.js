@@ -1,7 +1,7 @@
 import Post from "../models/postModel.js";
 import Comment from "../models/commentModel.js";
 
-// Post yarat
+
 export const createPost = async (req, res) => {
   try {
     const post = new Post({
@@ -16,7 +16,7 @@ export const createPost = async (req, res) => {
   }
 };
 
-// Şərh yarat
+
 export const createComment = async (req, res) => {
   try {
     const comment = new Comment({
@@ -34,7 +34,7 @@ export const createComment = async (req, res) => {
   }
 };
 
-// Bütün postları əldə et
+
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.find().populate("user").populate("comments");
@@ -44,11 +44,11 @@ export const getPosts = async (req, res) => {
   }
 };
 
-// İstifadəçinin postlarını əldə et
+
 export const getUserPosts = async (req, res) => {
   try {
     const { userId } = req.params;
-    const posts = await Post.find({ user: userId }); // userId ilə postları tapırıq
+    const posts = await Post.find({ user: userId });
     if (posts.length === 0) {
       return res.status(404).json({ message: "No posts found for this user." });
     }
@@ -62,13 +62,13 @@ export const deleteComment = async (req, res) => {
   try {
     const { postId, commentId } = req.params;
 
-    // Postu tap
+  
     const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({ message: "Post tapılmadı" });
     }
 
-    // Şərhi tap və sil
+
     const comment = await Comment.findById(commentId);
     if (!comment) {
       return res.status(404).json({ message: "Şərh tapılmadı" });
@@ -76,7 +76,7 @@ export const deleteComment = async (req, res) => {
 
     await Comment.findByIdAndDelete(commentId);
 
-    // Postun içində olan şərhlərdən silirik
+
     post.comments = post.comments.filter((c) => c.toString() !== commentId);
     await post.save();
 
@@ -85,3 +85,20 @@ export const deleteComment = async (req, res) => {
     res.status(500).json({ message: "Server xətası" });
   }
 };
+
+
+export const getPostById = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId)
+      .populate("user")
+      .populate("comments");
+    if (!post) {
+      return res.status(404).json({ message: "Post tapılmadı" });
+    }
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+

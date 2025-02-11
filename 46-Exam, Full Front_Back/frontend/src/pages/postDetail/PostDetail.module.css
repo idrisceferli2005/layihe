@@ -1,0 +1,145 @@
+.container {
+  max-width: 600px; /* Daha kiçik genişlik */
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.postDetail {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.profilePic {
+  width: 30px; /* Daha kiçik şəkil */
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.postImage {
+  max-width: 100%;
+  height: auto;
+  margin-top: 15px;
+  border-radius: 6px;
+}
+
+.reactions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 10px;
+  gap: 15px; /* İkonlar arasında daha az boşluq */
+}
+
+.reactions button {
+  background: transparent;
+  border: none;
+  font-size: 18px; /* Kiçik font ölçüsü */
+  cursor: pointer;
+  color: #262626;
+  transition: color 0.3s ease;
+}
+
+.reactions button:hover {
+  color: #0095f6;
+}
+
+.reactions .likesCount,
+.reactions .dislikesCount {
+  font-size: 14px; /* Kiçik rəqəm ölçüsü */
+  color: #999;
+}
+
+.commentSection {
+  margin-top: 20px;
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.commentUserImage {
+  width: 25px;
+  height: 25px; /* Kiçik şəkil */
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.commentItem {
+  padding: 8px;
+  background-color: #fafafa;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.commentInput {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 80%;
+  margin-bottom: 8px;
+  font-size: 14px; /* Kiçik font ölçüsü */
+}
+
+.commentForm button {
+  background-color: #0095f6;
+  color: white;
+  border: none;
+  padding: 6px 12px; /* Kiçik düymə */
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.commentForm button:hover {
+  background-color: #0078cc;
+}
+
+.commentForm {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+}
+.reactions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px; /* İkonlar və yazılar arasında daha geniş boşluq */
+}
+
+.reactions .likes,
+.reactions .dislikes {
+  display: flex;
+  align-items: center; /* İkona və yazı mərkəzləşdirir */
+  gap: 5px; /* İkona ilə yazı arasında boşluq */
+}
+
+.reactions button {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #262626;
+  transition: color 0.3s ease;
+}
+
+.reactions button:hover {
+  color: #0095f6;
+}
+
+.reactions .likesCount,
+.reactions .dislikesCount {
+  font-size: 14px;
+  color: #999;
+}
+
+.reactions span {
+  font-size: 14px;
+  color: #262626;
+  margin-left: 5px; /* Yazı ilə ikon arasında boşluq */
+}

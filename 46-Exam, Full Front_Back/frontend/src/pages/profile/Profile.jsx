@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchProfile, updateProfile, setUser, logoutUser } from "../../redux/features/profileSlice";
 import styles from "./Profile.module.css";
 import { fetchUserPosts } from "../../redux/features/postSlice";
@@ -10,7 +10,9 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user, loading, error } = useSelector((state) => state.profile);
+  console.log(user)
   const { posts } = useSelector((state) => state.posts);
+  console.log(posts)
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -22,12 +24,18 @@ const Profile = () => {
   useEffect(() => {
     if (id) {
       console.log(`Fetching profile for id: ${id}`);
-      dispatch(fetchProfile(id));
-      dispatch(fetchUserPosts(id));
-    } else {
-      console.error("ID is undefined");
+      dispatch(fetchProfile(id)).then(() => {
+        dispatch(fetchUserPosts(id));
+      });
     }
   }, [dispatch, id]);
+  useEffect(() => {
+    if (user && posts) {
+      const updatedUser = { ...user, posts };
+      console.log("Updated User with posts:", updatedUser);
+    }
+  }, [posts, user]);
+
 
   useEffect(() => {
     if (user) {
@@ -67,6 +75,8 @@ const Profile = () => {
   if (error) return <p>{error}</p>;
   if (!user) return <p>User not found</p>;
 
+  console.log(user.posts)
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -83,7 +93,9 @@ const Profile = () => {
           <p>{formData.email}</p>
           <p>Followers: {user.followers?.length }</p>
           <p>Following: {user.following?.length}</p>
-          <p>Posts: {user.posts?.length }</p>
+          <p>Posts: {posts.length}</p>
+
+          
         </div>
       </div>
       {isEditing && (
@@ -111,8 +123,10 @@ const Profile = () => {
   {posts?.length > 0 ? (
     posts.map((post) => (
       <div key={post._id} className={styles.post}>
-        <p>{post.content}</p>
-        {post.image && <img src={post.image} alt="Post" />}
+        <Link to={`/post/${post._id}`}>
+          <p>{post.content}</p>
+          {post.image && <img src={post.image} alt="Post" />}
+        </Link>
       </div>
     ))
   ) : (
