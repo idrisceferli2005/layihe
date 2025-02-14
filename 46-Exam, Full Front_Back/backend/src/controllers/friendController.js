@@ -27,11 +27,16 @@ export const sendFriendRequest = async (req, res) => {
 // Dostluq sorğusunu qəbul et
 export const acceptFriendRequest = async (req, res) => {
   try {
+    console.log("✅ acceptFriendRequest çağırıldı!", req.body); // TEST
     const { userId, friendId } = req.body;
+    console.log("🔹 userId:", userId);
+    console.log("🔹 friendId:", friendId);
+
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
 
     if (!user || !friend) {
+      console.log("❌ User not found");
       return res.status(404).json({ message: "User not found" });
     }
 
@@ -46,9 +51,12 @@ export const acceptFriendRequest = async (req, res) => {
 
     res.status(200).json({ message: "Friend request accepted" });
   } catch (error) {
+    console.error("❌ acceptFriendRequest error:", error);
     res.status(500).json({ message: error.message });
   }
 };
+
+
 
 // Dostluq sorğusunu rədd et
 export const declineFriendRequest = async (req, res) => {

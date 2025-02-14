@@ -3,9 +3,9 @@ import User from "../models/userModel.js";
 export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
-    .populate("posts") 
-    .populate("followers")
-    .populate("following");
+    .populate("posts", "content image") // Yalnız lazım olan sahələr
+    .populate("followers", "username")
+    .populate("following", "username")
     if (!user) {
       return res.status(404).json({ message: `User with ID ${req.params.id} not found` });
     }
@@ -19,8 +19,8 @@ export const updateUserProfile = async (req, res) => {
   try {
 
     const user = await User.findById(req.params.id).select("-password");
-    if (!user) {
-      return res.status(404).json({ message: `User with ID ${req.params.id} not found` });
+    if (!req.body.name && !req.body.username && !req.body.email && !req.body.image) {
+      return res.status(400).json({ message: "No data to update" });
     }
     user.name = req.body.name || user.name;
     user.username = req.body.username || user.username;

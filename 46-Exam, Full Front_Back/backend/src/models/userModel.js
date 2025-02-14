@@ -28,6 +28,18 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false, 
+    },
+    isLogined: {
+      type: Boolean,
+      default: false, 
+    },
+    isBanned: {
+      type: Boolean,
+      default: false, 
+    },
     friends: [
       {
         type: mongoose.Schema.Types.ObjectId,

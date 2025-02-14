@@ -1,36 +1,53 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom"; // ✅ useNavigate import edildi
 import "./Navbar.scss";
 import logoImg from "../../assets/images/logo.png.webp";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { FaUserCircle } from "react-icons/fa";
-import { loginUser, logoutUser } from "../../redux/features/UserSlice";
+import { FaUserCircle, FaCommentDots } from "react-icons/fa";
+import { loginUser, logoutUser } from "../../redux/features/userSlice";
 
 const Navbar = () => {
   const baseUrl = "http://localhost:5000/auth";
-  
-
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // ✅ useNavigate istifadəyə hazırdır
+
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleLogout = async () => {
-    const res = await axios.get(`${baseUrl}/logout`);
+    if (!user || !user.existUser || !user.existUser._id) {
+      alert("User not found");
+      return;
+    }
 
+    try {
+      const res = await axios.post(`${baseUrl}/logout`, { userId: user.existUser._id });
 
-
-    if (res.status === 200) {
-      dispatch(logoutUser())
-      alert("Logout successful");
-    } else {
-      alert("Logout failed");
+      if (res.status === 200) {
+        dispatch(logoutUser());
+        alert("Logout successful");
+        navigate("/login"); // ✅ Logout olduqdan sonra login səhifəsinə yönləndirir
+      } else {
+        alert("Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("An error occurred during logout");
     }
   };
-  useEffect(() => {
-  loginUser()
-  } , [dispatch])
 
-  
+  const currentUser = user?.existUser?.isLogined ? user : null;
+  const toggleChat = () => {
+    setIsChatOpen(!isChatOpen);
+  };
+
+  useEffect(() => {
+    loginUser();
+  }, [dispatch]);
+
+  const admin = user?.existUser?.isAdmin;
+
   return (
     <div className="navbar-section">
       <div className="container">
@@ -42,21 +59,11 @@ const Navbar = () => {
             <li className="navlist-item">
               <Link to="/">Home</Link>
             </li>
-            <li className="navlist-item">
-              <Link to="/category">Category</Link>
-            </li>
-            <li className="navlist-item">
-              <Link to="/men">Men</Link>
-            </li>
-            <li className="navlist-item">
-              <Link to="/women">Women</Link>
-            </li>
-            <li className="navlist-item">
-              <Link to="/latest">Latest</Link>
-            </li>
-            <li className="navlist-item">
-              <Link to="/admin">Admin</Link>
-            </li>
+            {admin && (
+              <li className="navlist-item">
+                <Link to="/admin">Admin</Link>
+              </li>
+            )}
             <li className="navlist-item">
               <Link to="/search">Search</Link>
             </li>
@@ -67,30 +74,30 @@ const Navbar = () => {
               <Link to="/posts">Posts</Link>
             </li>
             {user && user.existUser && user.existUser._id ? (
-  <li>
-   <Link to={`/profile/${user && user.existUser ? user.existUser._id : ''}`}>
-  <FaUserCircle />
-</Link>
-  </li>
-) : (
-  <span>User profile not available</span>
-)}
+              <li>
+                <Link to={`/profile/${user.existUser._id}`}>
+                  <FaUserCircle />
+                </Link>
+              </li>
+            ) : (
+              <span>User profile not available</span>
+            )}
           </ul>
           <div className="wrapper">
-  
+            <div className="chat-icon">
+              <button onClick={toggleChat} className="btn btn-light">
+                <FaCommentDots />
+              </button>
+            </div>
             <div className="dropdown">
-              <button
-                className="btn btn-light"
-                type="button"
-                data-bs-toggle="dropdown"
-              >
+              <button className="btn btn-light" type="button" data-bs-toggle="dropdown">
                 <i className="fa-solid fa-user"></i>
                 {user && user.existUser ? user.existUser.username : "User"}
               </button>
               <ul className="dropdown-menu">
                 {user ? (
                   <li onClick={handleLogout}>
-                    <Link className="dropdown-item logout " to="/">
+                    <Link className="dropdown-item logout" to="/">
                       Logout
                     </Link>
                   </li>

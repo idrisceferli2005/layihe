@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./Search.module.css";
@@ -9,18 +9,27 @@ const Search = () => {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState("");
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    try {
-      const userResponse = await axios.get(`http://localhost:5000/api/search/users?q=${query}`);
-      const postResponse = await axios.get(`http://localhost:5000/api/search/posts?q=${query}`);
+  // Fetch posts and users when the component mounts (and whenever query changes)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userResponse = await axios.get(`http://localhost:5000/api/search/users?q=${query}`);
+        const postResponse = await axios.get(`http://localhost:5000/api/search/posts?q=${query}`);
+        
+        setUsers(userResponse.data || []);
+        setPosts(postResponse.data || []);
+      } catch (error) {
+        console.error("Xəta baş verdi:", error);
+        setError(error.response?.data?.message || "Xəta baş verdi");
+      }
+    };
 
-      setUsers(userResponse.data || []);
-      setPosts(postResponse.data || []);
-    } catch (error) {
-      console.error("Xəta baş verdi:", error);
-      setError(error.response?.data?.message || "Xəta baş verdi");
-    }
+    fetchData();
+  }, [query]); // Trigger the effect whenever 'query' changes
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // You can perform any additional handling here if necessary
   };
 
   return (
@@ -38,7 +47,6 @@ const Search = () => {
       </form>
       {error && <p className={styles.error}>{error}</p>}
 
-   
       <div className={styles.section}>
         <h2>İstifadəçilər</h2>
         <div className={styles.userGrid}>
@@ -46,7 +54,7 @@ const Search = () => {
             users.map((user) => (
               <div key={user._id} className={styles.userCard}>
                 <Link to={`/profile/${user._id}`}>
-                  <img src={user.image || "https://via.placeholder.com/70"} alt={user.username} className={styles.profilePic} />
+                  <img src={user.image} alt={user.username} className={styles.profilePic} />
                   <span className={styles.username}>{user.username}</span>
                 </Link>
               </div>
@@ -57,7 +65,6 @@ const Search = () => {
         </div>
       </div>
 
- 
       <div className={styles.section}>
         <h2>Postlar</h2>
         <div className={styles.postGrid}>

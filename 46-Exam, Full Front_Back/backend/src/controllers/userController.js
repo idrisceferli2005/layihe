@@ -15,7 +15,6 @@ export const register = async (req, res) => {
     const { name, username, email, password } = req.body;
 
     const { filename } = req.file;
-
     const imageUrl = `images/${filename}`.replace(/\\/g, "/");
 
     const { error } = RegisterValidationSchema.validate({
@@ -35,14 +34,19 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    const hasedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // İlk istifadəçi olub-olmamasını yoxlamaq
+    const totalUsers = await user.countDocuments();
+    const isAdmin = totalUsers === 0;  // Əgər 0 istifadəçi varsa, admin təyin et
 
     const newUser = new user({
       image: imageUrl,
       name,
       username,
       email,
-      password: hasedPassword,
+      password: hashedPassword,
+      isAdmin,  // İlk istifadəçi admin olacaq
     });
 
     await newUser.save();
@@ -60,6 +64,19 @@ export const register = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+};
+
+
+export const getCurrentUser = async (req, res) => {
+  try {
+    const currentUser = await user.findById(req.user.id).select("-password"); 
+    if (!currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.json(currentUser); 
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -93,7 +110,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    const existUser = await user.findOne({ username: username });
+    const existUser = await User.findOne({ username });
 
     if (!existUser) {
       return res.status(400).json({ message: "User not found" });
@@ -104,6 +121,10 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Username or Password wrong" });
     }
+
+ 
+    existUser.isLogined = true;
+    await existUser.save();
 
     generateToken(existUser._id, res);
 
@@ -116,10 +137,24 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = (req, res) => {
-  res.clearCookie("token");
-  return res.status(200).json({ message: "User logged out successfully" });
+
+export const logout = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    await User.findByIdAndUpdate(userId, { isLogined: false });
+
+    res.clearCookie("token");
+    return res.status(200).json({ message: "User logged out successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
+
 
 export const forgotPassword = async (req, res) => {
   try {
@@ -206,5 +241,84 @@ export const createPost = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  console.log("User ID to delete:", req.params.id); // ID konsola yazdır
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find(); // Bütün istifadəçiləri alır
+    if (!users) {
+      return res.status(404).json({ message: "No users found" });
+    }
+    res.json(users); // İstifadəçiləri qaytarır
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateUserRole = async (req, res) => {
+  const { userId } = req.params;
+  const { role } = req.body;  // Get the role from the request body
+
+  try {
+    // Check if the user is an admin before making changes
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied. Admin only!" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // If the role is 'admin', update the isAdmin field to true
+    if (role === "admin") {
+      user.isAdmin = true;
+    }
+
+    await user.save();  // Save the updated user
+
+    res.status(200).json({ message: "User role updated", user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+export const banUser = async (req, res) => {
+  const { userId } = req.params;  
+
+  try {
+
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied. Admin only!" });
+    }
+
+   
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // İstifadəçi banlanır
+    user.isBanned = true;  
+    await user.save();  
+
+    res.status(200).json({ message: "User banned", user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

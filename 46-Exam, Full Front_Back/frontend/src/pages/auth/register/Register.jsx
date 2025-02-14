@@ -10,22 +10,33 @@ const Register = () => {
   const submitForm = async (values, actions) => {
     try {
       const formData = new FormData();
-      formData.append("image", values.image);
+      console.log('Form values before append:', values); // Log the values to verify
+  
+      if (values.image) {
+        formData.append("image", values.image);
+      } else {
+        console.log('No image selected');
+      }
       formData.append("name", values.name);
       formData.append("username", values.username);
       formData.append("email", values.email);
       formData.append("password", values.password);
-
+  
+      // Check FormData content before sending
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+      }
+  
       await axios.post(`${baseUrl}/register`, formData);
-
+  
       actions.resetForm();
-
-      alert(" Please check your email to verify your account.");
+  
+      alert("Please check your email to verify your account.");
     } catch (error) {
       console.error("Registration failed:", error);
     }
   };
-
+  
   const { values, handleChange, handleSubmit, setFieldValue, errors } =
     useFormik({
       initialValues: {

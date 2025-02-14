@@ -1,5 +1,6 @@
 import Post from "../models/postModel.js";
 import Comment from "../models/commentModel.js";
+import User from "../models/userModel.js";
 
 
 export const createPost = async (req, res) => {
@@ -9,7 +10,15 @@ export const createPost = async (req, res) => {
       content: req.body.content,
       image: req.body.image,
     });
+
+    // Postu qeyd edin
     const savedPost = await post.save();
+
+    // İstifadəçinin profilindəki posts sahəsinə bu postu əlavə edin
+    const user = await User.findById(req.user._id);
+    user.posts.push(savedPost._id); // Yaradılan postu istifadəçinin posts sahəsinə əlavə et
+    await user.save();
+
     res.status(201).json(savedPost);
   } catch (error) {
     res.status(500).json({ message: error.message });

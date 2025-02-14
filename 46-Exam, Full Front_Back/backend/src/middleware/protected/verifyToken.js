@@ -1,8 +1,6 @@
-import jwt from "jsonwebtoken";
-const { JWT_SECRET } = process.env;
-
 export const verifyToken = (req, res, next) => {
   try {
+    console.log("Cookies:", req.cookies); 
     const token = req.cookies.token;
 
     if (!token) {
@@ -10,7 +8,6 @@ export const verifyToken = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, JWT_SECRET);
-
     req.user = decoded;
 
     next();
@@ -18,5 +15,3 @@ export const verifyToken = (req, res, next) => {
     return res.status(500).json({ message: "Invalid or Expired Token" });
   }
 };
-
-export default verifyToken;

@@ -1,174 +1,97 @@
-import React, { useState } from "react";
-import "./Admin.scss";
-import Table from "react-bootstrap/Table";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useFormik } from "formik";
-import {
-  addProduct,
-  deleteProduct,
-  searchProduct,
-  sortProductHigest,
-  sortProductLowest,
-} from "../../redux/features/ProductSlice";
-import { productSchema } from "../../schema/ProductCreateSchema";
+import Table from "react-bootstrap/Table";
+import { banUser, deleteUser, getUsers, updateUserRole } from "../../redux/features/userSlice";
+import "./Admin.scss";
 
-const Admin = () => {
-  const { products } = useSelector((state) => state.products);
+const AdminPanel = () => {
   const dispatch = useDispatch();
+  const { users } = useSelector((state) => state.user); 
+  console.log("Users:", users);
 
-  const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const {
-    values,
-    handleChange,
-    handleSubmit,
-    setFieldValue,
-    errors,
-    resetForm,
-  } = useFormik({
-    initialValues: {
-      image: null,
-      title: "",
-      category: "",
-      price: "",
-    },
-    onSubmit: (values) => {
-      const formData = new FormData();
+  useEffect(() => {
+    dispatch(getUsers()).then((res) => console.log(res)); 
+  }, [dispatch]);
 
-      formData.append("image", values.image);
-      formData.append("title", values.title);
-      formData.append("category", values.category);
-      formData.append("price", values.price);
-      
-      dispatch(addProduct(formData));
-      resetForm();
-      setOpen(false);
-    },
-    validationSchema: productSchema,
-  });
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      dispatch(deleteUser(id));
+    }
+  };
+
+  const handleUpdateRole = (userId) => {
+    if (!userId) {
+      console.error("User ID is required to update role.");
+      return;
+    }
+    
+   
+    dispatch(updateUserRole({ userId, role: 'admin' }));
+  };
+  
+
+  const handleBanUser = (id) => {
+    if (window.confirm("Are you sure you want to ban this user?")) {
+      dispatch(banUser(id));
+    }
+  };
+
+  const filteredUsers = users.filter(user => 
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="container">
-      {open && (
-        <form
-          encType="multipart/form-data"
-          action=""
-          className="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-        >
-          <h3>Create Product</h3>
-          <div className="form-group">
-            <label htmlFor="image">Image</label>
-            <div className="text-danger">{errors.image}</div>
-            <input
-              type="file"
-              id="image"
-              className="form-control"
-              onChange={(e) => setFieldValue("image", e.currentTarget.files[0])}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="title">Title</label>
-            <div className="text-danger">{errors.title}</div>
-            <input
-              type="text"
-              id="title"
-              className="form-control"
-              onChange={handleChange}
-              value={values.title}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="category">Category</label>
-            <div className="text-danger">{errors.category}</div>
-            <input
-              type="text"
-              id="category"
-              className="form-control"
-              onChange={handleChange}
-              value={values.category}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="price">Price</label>
-            <div className="text-danger">{errors.price}</div>
-            <input
-              type="text"
-              id="price"
-              className="form-control"
-              onChange={handleChange}
-              value={values.price}
-            />
-          </div>
+    <div className="admin-panel">
+      <h2>Admin Panel - Users</h2>
+      
+      <input
+        type="text"
+        className="search-box"
+        placeholder="İstifadəçi axtar..."
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
 
-          <button className="btn btn-primary">Add</button>
-        </form>
-      )}
-      <h2 className="text-center my-3">Admin Panel</h2>
-      <div className=" mb-2 d-flex justify-content-between">
-        <button className="btn btn-success" onClick={() => setOpen(!open)}>
-          Create
-        </button>
-        <input
-          type="text"
-          onChange={(e) => dispatch(searchProduct(e.target.value))}
-        />
-        <div className="d-flex gap-2">
-          <button
-            className="btn btn-primary"
-            onClick={() => dispatch(sortProductLowest())}
-          >
-            Low
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => dispatch(sortProductHigest())}
-          >
-            High
-          </button>
-        </div>
-      </div>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>Image</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Setting</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Posts</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {products &&
-            products.map((item) => (
-              <tr key={item._id}>
+          {filteredUsers && filteredUsers.length > 0 ? (
+            filteredUsers.map((user) => (
+              <tr key={user._id}>
+                <td><img src={user.image} alt="" /></td>
+                <td>{user.name || "N/A"}</td>
+                <td>{user.email || "N/A"}</td>
+                <td>{user.username || "N/A"}</td>
+                <td>{user.posts.length || "N/A"}</td>
                 <td>
-                  <img
-                    style={{ width: "100px", height: "100px" }}
-                    src={`http://localhost:5000/${item.image}`}
-                    alt=""
-                  />
-                </td>
-                <td>{item.title}</td>
-                <td>{item.category}</td>
-                <td>{item.price}</td>
-                <td>
-                  <button
-                    className="btn btn-danger"
-                    onClick={() => dispatch(deleteProduct(item._id))}
-                  >
-                    Delete
-                  </button>
+                  <button className="btn btn-danger" onClick={() => handleDelete(user._id)}>Delete</button>
+                  <button className="btn btn-warning" onClick={() => handleUpdateRole(user._id)}>
+  Promote to Admin
+</button>
+                  <button className="btn btn-warning" onClick={() => handleBanUser(user._id)}>Ban</button>
                 </td>
               </tr>
-            ))}
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center">No users found.</td>
+            </tr>
+          )}
         </tbody>
       </Table>
     </div>
   );
 };
 
-export default Admin;
+export default AdminPanel;
