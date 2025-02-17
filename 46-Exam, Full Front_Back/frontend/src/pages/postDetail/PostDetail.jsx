@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import styles from "./PostDetail.module.css";
+import { dislikePost, likePost } from "../../redux/features/postSlice";
+import { useDispatch } from "react-redux";
+
 
 const PostDetail = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [commentContent, setCommentContent] = useState("");
   const [error, setError] = useState("");
-
+const dispatch = useDispatch()
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -20,10 +23,10 @@ const PostDetail = () => {
         console.error("Postu almaqda xəta:", error);
         setError("Post alınarkən xəta baş verdi.");
       }
-    };
+    } ;
 
     fetchPost();
-  }, [id]);
+  }, [id, dispatch]);
 
   const handleCommentChange = (e) => {
     setCommentContent(e.target.value);
@@ -57,6 +60,16 @@ const PostDetail = () => {
           <img src={post.user.image} alt={post.user.username} className={styles.profilePic} />
           <p>{post.content}</p>
           {post.image && <img src={post.image} alt="Post image" className={styles.postImage} />}
+
+                  <div className={styles.actions}>
+                      <button onClick={() => dispatch(likePost(post._id))}>
+                  👍 {post.likes.length}
+                </button>
+                <button onClick={() => dispatch(dislikePost(post._id))}>
+                  👎 {post.dislikes.length}
+                </button>
+                        <span>{post.likes?.length || 0} Likes</span>
+                      </div>
           
           <div className={styles.comments}>
             <h3>Şərhlər</h3>

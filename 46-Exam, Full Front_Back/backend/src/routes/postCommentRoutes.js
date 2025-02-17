@@ -1,5 +1,5 @@
 import express from "express";
-import { createComment, createPost, deleteComment, getPostById, getPosts, getUserPosts } from "../controllers/postCommentController.js";
+import { createComment, createPost, deleteComment, dislikePost, getPostById, getPosts, getUserPosts, likePost } from "../controllers/postCommentController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const postcommentRouter = express.Router();
@@ -10,5 +10,7 @@ postcommentRouter.get("/", protect, getPosts);
 postcommentRouter.get("/:postId", protect, getPostById);
 postcommentRouter.get("/user/:userId", protect, getUserPosts);
 postcommentRouter.delete("/:postId/comments/:commentId", protect, deleteComment);
+postcommentRouter.put("/like/:postId", protect, likePost);
+postcommentRouter.put("/dislike/:postId", protect, dislikePost);
 
 export default postcommentRouter; 

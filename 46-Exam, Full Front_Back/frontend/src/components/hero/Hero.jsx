@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPosts, createComment, deleteComment } from "../../redux/features/postSlice";
+import { fetchPosts, createComment, deleteComment, likePost, dislikePost } from "../../redux/features/postSlice";
 import { Link } from "react-router-dom";
 import styles from "./Hero.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -57,8 +57,12 @@ const Hero = () => {
             {post.image && <img src={post.image} alt="Post" />}
             <p>{post.content}</p>
             <div className={styles.actions}>
-              <button onClick={() => handleLike(post._id)}>Like</button>
-              <button onClick={() => handleUnlike(post._id)}>Unlike</button>
+            <button onClick={() => dispatch(likePost(post._id))}>
+        👍 {post.likes.length}
+      </button>
+      <button onClick={() => dispatch(dislikePost(post._id))}>
+        👎 {post.dislikes.length}
+      </button>
               <span>{post.likes?.length || 0} Likes</span>
             </div>
             <ul className={styles.comments}>

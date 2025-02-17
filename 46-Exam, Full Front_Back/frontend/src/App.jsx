@@ -21,7 +21,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-    errorElement: <ErrorBoundary />, 
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: "/",
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin",
-        element: <ProtectAdmin />, 
+        element: <ProtectAdmin />,
         children: [
           {
             path: "/admin",
@@ -46,14 +46,6 @@ const router = createBrowserRouter([
         element: <EditProfile />,
       },
       {
-        path: "/register",
-        element: <Register />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
         path: "/forgotpassword",
         element: <ForgotPassword />,
       },
@@ -63,7 +55,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/search",
-        element: <Search/>
+        element: <Search />,
       },
       {
         path: "/notifications",
@@ -76,13 +68,21 @@ const router = createBrowserRouter([
       {
         path: "/post/:id",
         element: <PostDetail />,
-      }
+      },
     ],
+  },
+  // Login və Register səhifələri Layout-dan ayrıldı
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ]);
 
 function App() {
-
   return <RouterProvider router={router} />;
 }
 

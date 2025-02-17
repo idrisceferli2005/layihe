@@ -90,6 +90,18 @@ export const fetchUserPosts = createAsyncThunk(
   }
 );
 
+export const likePost = createAsyncThunk("posts/likePost", async (postId) => {
+  const { data } = await axios.put(`http://localhost:5000/api/posts/like/${postId}`, {}, { withCredentials: true });
+  return data;
+});
+
+// Dislike
+export const dislikePost = createAsyncThunk("posts/dislikePost", async (postId) => {
+  const { data } = await axios.put(`http://localhost:5000/api/posts/dislike/${postId}`, {}, { withCredentials: true });
+  return data;
+});
+
+
 
 const postSlice = createSlice({
   name: "posts",
@@ -151,6 +163,14 @@ const postSlice = createSlice({
       .addCase(createComment.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(likePost.fulfilled, (state, action) => {
+        const index = state.posts.findIndex((post) => post._id === action.payload._id);
+        if (index !== -1) state.posts[index] = action.payload;
+      })
+      .addCase(dislikePost.fulfilled, (state, action) => {
+        const index = state.posts.findIndex((post) => post._id === action.payload._id);
+        if (index !== -1) state.posts[index] = action.payload;
       })
       .addCase(deleteComment.fulfilled, (state, action) => {
         const postIndex = state.posts.findIndex(post => post._id === action.payload.postId);

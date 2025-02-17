@@ -109,5 +109,52 @@ export const getPostById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+export const likePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    if (!post) return res.status(404).json({ message: "Post tapılmadı" });
 
+    const userId = req.user.id;
+
+    if (post.likes.includes(userId)) {
+      // Əgər artıq like edibsə, çıxar
+      post.likes = post.likes.filter((id) => id.toString() !== userId);
+    } else {
+      // Əgər dislike edibsə, çıxar
+      post.dislikes = post.dislikes.filter((id) => id.toString() !== userId);
+      // Like əlavə et
+      post.likes.push(userId);
+    }
+
+    await post.save();
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// **Posta Dislike atmaq**
+export const dislikePost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId);
+    if (!post) return res.status(404).json({ message: "Post tapılmadı" });
+
+    const userId = req.user.id;
+
+    if (post.dislikes.includes(userId)) {
+      // Əgər artıq dislike edibsə, çıxar
+      post.dislikes = post.dislikes.filter((id) => id.toString() !== userId);
+    } else {
+      // Əgər like edibsə, çıxar
+      post.likes = post.likes.filter((id) => id.toString() !== userId);
+      // Dislike əlavə et
+      post.dislikes.push(userId);
+    }
+
+    await post.save();
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
