@@ -2,7 +2,6 @@ import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 
 
-// İstifadəçiləri axtar
 export const searchUsers = async (req, res) => {
   try {
     const users = await User.find({ username: { $regex: req.query.q, $options: "i" } });
@@ -12,7 +11,7 @@ export const searchUsers = async (req, res) => {
   }
 };
 
-// Postları axtar
+
 export const searchPosts = async (req, res) => {
   try {
     const posts = await Post.find({ content: { $regex: req.query.q, $options: "i" } });

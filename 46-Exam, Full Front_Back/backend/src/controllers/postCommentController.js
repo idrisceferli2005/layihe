@@ -5,25 +5,32 @@ import User from "../models/userModel.js";
 
 export const createPost = async (req, res) => {
   try {
+    if (!req.body.content || !req.file) {
+      return res.status(400).json({ message: "Content and image are required" });
+    }
+    const imageUrl = `images/${req.file.filename}`.replace(/\\/g, "/");
     const post = new Post({
       user: req.user._id,
       content: req.body.content,
-      image: req.body.image,
+      image: imageUrl,
     });
 
-    // Postu qeyd edin
+ 
     const savedPost = await post.save();
 
-    // İstifadəçinin profilindəki posts sahəsinə bu postu əlavə edin
+    
     const user = await User.findById(req.user._id);
-    user.posts.push(savedPost._id); // Yaradılan postu istifadəçinin posts sahəsinə əlavə et
-    await user.save();
+    if (user) {
+      user.posts.push(savedPost._id);
+      await user.save();
+    }
 
     res.status(201).json(savedPost);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 export const createComment = async (req, res) => {
@@ -117,12 +124,12 @@ export const likePost = async (req, res) => {
     const userId = req.user.id;
 
     if (post.likes.includes(userId)) {
-      // Əgər artıq like edibsə, çıxar
+    
       post.likes = post.likes.filter((id) => id.toString() !== userId);
     } else {
-      // Əgər dislike edibsə, çıxar
+  
       post.dislikes = post.dislikes.filter((id) => id.toString() !== userId);
-      // Like əlavə et
+     
       post.likes.push(userId);
     }
 
@@ -133,7 +140,7 @@ export const likePost = async (req, res) => {
   }
 };
 
-// **Posta Dislike atmaq**
+
 export const dislikePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.postId);
@@ -142,12 +149,12 @@ export const dislikePost = async (req, res) => {
     const userId = req.user.id;
 
     if (post.dislikes.includes(userId)) {
-      // Əgər artıq dislike edibsə, çıxar
+    
       post.dislikes = post.dislikes.filter((id) => id.toString() !== userId);
     } else {
-      // Əgər like edibsə, çıxar
+  
       post.likes = post.likes.filter((id) => id.toString() !== userId);
-      // Dislike əlavə et
+    
       post.dislikes.push(userId);
     }
 

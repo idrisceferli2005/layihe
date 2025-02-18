@@ -3,7 +3,7 @@ import User from "../models/userModel.js";
 export const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
-    .populate("posts", "content image") // Yalnız lazım olan sahələr
+    .populate("posts", "content image") 
     .populate("followers", "username")
     .populate("following", "username")
     if (!user) {

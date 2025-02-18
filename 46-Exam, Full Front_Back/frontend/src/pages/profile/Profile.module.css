@@ -1,117 +1,179 @@
+
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #dbdbdb;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .header h1 {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fafafa;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 36px;
+  font-weight: 600;
+  color: #333;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.profileInfo img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.profileDetails {
+  font-size: 18px;
+  color: #333;
+}
+
+.profileDetails h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.profileDetails p {
+  margin: 5px 0;
+}
+
+.profileDetails a {
+  color: #0095f6;
+  text-decoration: none;
+}
+
+.editButton {
+  background-color: #0095f6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.editButton:hover {
+  background-color: #0078d4;
+}
+
+
+.posts {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px; 
+}
+
+.posts .post {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.posts .post img {
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.posts .post p {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.posts .post a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Mobil və tablet üçün responsiv dizayn */
+@media (max-width: 768px) {
   .profileInfo {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .profileInfo img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin-right: 20px;
-  }
-  
-  .profileDetails {
-    display: flex;
     flex-direction: column;
   }
-  
+
+  .profileInfo img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profileDetails {
+    font-size: 16px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
+
   .profileDetails h2 {
     font-size: 20px;
-    font-weight: bold;
   }
-  
-  .profileDetails p {
-    margin: 5px 0;
-  }
-  
-  .editButton {
-    background-color: #0095f6;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .editButton:hover {
-    background-color: #007bb5;
-  }
-  
+
   .posts {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr); /* Tablet üçün 2 sütun */
   }
-  
-  .post {
-    border: 1px solid #dbdbdb;
-    border-radius: 8px;
+
+  .posts .post {
     padding: 10px;
-    background-color: #f9f9f9;
   }
-  
-  .post img {
+
+  .editButton {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .profileInfo img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profileDetails {
+    font-size: 14px;
+  }
+
+  .profileDetails h2 {
+    font-size: 18px;
+  }
+
+  .editButton {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .posts {
+    grid-template-columns: repeat(1, 1fr); /* Mobil üçün 1 sütun */
+  }
+
+  .posts .post {
+    padding: 8px;
+  }
+
+  .posts .post img {
     width: 100%;
     border-radius: 8px;
-    margin-top: 10px;
   }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .formGroup {
-    margin-bottom: 15px;
-  }
-  
-  .formGroup label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
-  }
-  
-  .formGroup input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #dbdbdb;
-    border-radius: 4px;
-  }
-  
-  .button {
-    background-color: #0095f6;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .button:hover {
-    background-color: #007bb5;
-  }
+}

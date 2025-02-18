@@ -1,7 +1,7 @@
 import Notification from "../models/notification.js";
 
 
-// Bildiriş yarat
+
 export const createNotification = async (req, res) => {
   try {
     const notification = new Notification({
@@ -16,7 +16,6 @@ export const createNotification = async (req, res) => {
   }
 };
 
-// Bildirişləri əldə et
 export const getNotifications = async (req, res) => {
   try {
     const notifications = await Notification.find({ user: req.user._id });

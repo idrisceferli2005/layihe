@@ -72,8 +72,8 @@ const Search = () => {
             posts.map((post) => (
               <div key={post._id} className={styles.postCard}>
                 <Link to={`/post/${post._id}`}>
-                  {post.image && <img src={post.image} alt="Post" className={styles.postImage} />}
-                  <p>{post.content}</p>
+                {post.image && <img src={`http://localhost:5000/${post.image}`} alt="Post" />}
+               
                 </Link>
               </div>
             ))

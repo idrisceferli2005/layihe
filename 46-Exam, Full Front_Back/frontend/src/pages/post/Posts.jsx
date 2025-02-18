@@ -10,13 +10,25 @@ const Posts = () => {
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createPost({ content, image }));
+    const formData = new FormData();
+    formData.append("content", content);
+  
+    if (image) {
+      formData.append("image", image); // File obyektini əlavə et
+    } else {
+      alert("Please select an image");
+      return;
+    }
+  
+    dispatch(createPost(formData));
     setContent("");
-    setImage("");
-    navigate("/"); // Post paylaşandan sonra ana səhifəyə yönləndir
+    setImage(null);
+    navigate("/");
   };
+  
+  
 
   
 
@@ -29,12 +41,11 @@ const Posts = () => {
           onChange={(e) => setContent(e.target.value)}
           placeholder="Write a post..."
         />
-        <input
-          type="text"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          placeholder="Image URL"
-        />
+    <input
+  type="file"
+  onChange={(e) => setImage(e.target.files[0])} // Faylı seç
+  accept="image/*" // Yalnız şəkil fayllarını qəbul et
+/>
         <button type="submit">Post</button>
       </form>
     </div>

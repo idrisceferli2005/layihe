@@ -51,7 +51,7 @@ const EditProfile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateProfile({ id, user: formData }));
-    navigate(`/profile/${id}`); // Redirect back to the profile page after updating
+    navigate(`/profile/${id}`);
   };
 
   if (loading) return <p>Loading...</p>;

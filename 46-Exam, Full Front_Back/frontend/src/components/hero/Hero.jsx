@@ -32,6 +32,8 @@ const Hero = () => {
     dispatch(deleteComment({ postId, commentId }));
   };
 
+console.log(user.existUser._id)
+console.log(posts)
   return (
     <div className={styles.container}>
       <h1>Home (Feed)</h1>
@@ -54,29 +56,37 @@ const Hero = () => {
   <p>User not available</p> 
 )}
             </div>
-            {post.image && <img src={post.image} alt="Post" />}
+            {post.image && <img src={`http://localhost:5000/${post.image}`} alt="Post" />}
             <p>{post.content}</p>
             <div className={styles.actions}>
-            <button onClick={() => dispatch(likePost(post._id))}>
-        👍 {post.likes.length}
+            <button className={styles.number} onClick={() => dispatch(likePost(post._id))}>
+        👍 {post?.likes?.length}
       </button>
-      <button onClick={() => dispatch(dislikePost(post._id))}>
-        👎 {post.dislikes.length}
+      <button className={styles.number} onClick={() => dispatch(dislikePost(post._id))}>
+        👎 {post?.dislikes?.length}
       </button>
               <span>{post.likes?.length || 0} Likes</span>
             </div>
             <ul className={styles.comments}>
-              {post.comments && post.comments.length > 0 ? (
-                post.comments.map((comment) => (
-                  <li key={comment._id}>
-                    {comment.content}
-                    <button className="btn btn-danger" onClick={() => handleCommentDelete(post._id, comment._id)}>Delete</button>
-                  </li> 
-                ))
-              ) : (
-                <p>No comments yet.</p>
-              )}
-            </ul>
+  {post.comments && post.comments.length > 0 ? (
+    post.comments.map((comment) => (
+      <li key={comment._id}>
+        {comment.content}
+        {user?.existUser?._id === post?.user?._id && (
+          <button
+            className="btn btn-danger"
+            onClick={() => handleCommentDelete(post._id, comment._id)}
+          >
+            Delete
+          </button>
+        )}
+      </li>
+    ))
+  ) : (
+    <p>No comments yet.</p>
+  )}
+</ul>
+
             <form
               className={styles["comment-form"]}
               onSubmit={(e) => {

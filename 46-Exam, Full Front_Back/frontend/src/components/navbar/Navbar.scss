@@ -1,23 +1,158 @@
+/* Ümumi Navbar Dizaynı */
 .navbar-section {
+  background-color: #ffffff;
+  padding: 10px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.navlist {
+  display: flex;
+  gap: 20px;
+}
+
+.navlist-item {
+  font-size: 18px;
+}
+
+.navlist-item a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navlist-item a:hover {
+  color: #0095f6;
+}
+
+.navbar-item {
+  margin: 0 10px;
+  color: #333;
+}
+
+.navbar-item:hover {
+  color: #0095f6;
+}
+
+.chat-icon button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+}
+
+/* Profil ve Logout Düyməsi */
+.dropdown button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.dropdown-menu {
+  min-width: 160px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+  color: #333;
+  padding: 10px 20px;
+  text-decoration: none;
+}
+
+.dropdown-item:hover {
+  background-color: #f2f2f2;
+}
+
+/* Logout */
+.logout {
+  color: #ff4d4f;
+}
+
+.logout:hover {
+  background-color: #f7d1d1;
+}
+
+/* Mobil Cihazlar üçün */
+@media (max-width: 768px) {
+  /* Navbar Menyusunu sadeleştir */
+  .navlist {
+    display: none; /* Diğer menü öğeleri gizlensin */
+  }
+
+  .navbar-item {
+    display: block;
+    font-size: 24px;
+    padding: 10px;
+  }
+
   .navbar {
-    padding: 20px 0;
-    .navlist {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      margin: 0;
-      padding: 0;
-    }
-    .wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      font-size: 20px;
-    }
-    a {
-      color: black;
-    }
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    justify-content: space-around;
+    background-color: #fff;
+    border-top: 1px solid #f2f2f2;
+    z-index: 100;
+    padding: 10px 0;
+  }
+
+  /* Alt Menyu */
+  .navbar-item {
+    display: block;
+    font-size: 24px;
+    padding: 5px;
+  }
+
+  .chat-icon button,
+  .dropdown button {
+    display: block;
+    padding: 10px;
+  }
+
+  .chat-icon button {
+    font-size: 28px;
+  }
+
+  .dropdown button {
+    font-size: 24px;
+  }
+
+  .dropdown-menu {
+    display: block;
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Home, Search, Notifications, Posts ve Profile dışındaki diğer öğeler gizlensin */
+
+  .chat-icon,
+  .dropdown {
+    display: none;
   }
 }

@@ -68,7 +68,7 @@ export const store = configureStore({
     profile: persistedProfileReducer,
     notifications: persistedNotificationReducer,
     posts: persistedPostReducer,
-    friends: friendSlice,
+    follow: friendSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

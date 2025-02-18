@@ -56,16 +56,16 @@ const dispatch = useDispatch()
       {error && <p className={styles.error}>{error}</p>}
       {post ? (
         <div className={styles.postDetail}>
-          <h2>{post.user.username}</h2>
-          <img src={post.user.image} alt={post.user.username} className={styles.profilePic} />
+          <h2>{post?.user?.username}</h2>
+          <img src={post?.user?.image} alt={post?.user?.username} className={styles.profilePic} />
+          
+          {post.image && <img src={`http://localhost:5000/${post.image}`} alt="Post" />}
           <p>{post.content}</p>
-          {post.image && <img src={post.image} alt="Post image" className={styles.postImage} />}
-
                   <div className={styles.actions}>
-                      <button onClick={() => dispatch(likePost(post._id))}>
+                      <button className={styles.number} onClick={() => dispatch(likePost(post._id))}>
                   👍 {post.likes.length}
                 </button>
-                <button onClick={() => dispatch(dislikePost(post._id))}>
+                <button className={styles.number} onClick={() => dispatch(dislikePost(post._id))}>
                   👎 {post.dislikes.length}
                 </button>
                         <span>{post.likes?.length || 0} Likes</span>

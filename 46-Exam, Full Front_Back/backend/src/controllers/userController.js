@@ -216,19 +216,19 @@ export const resetPassword = async (req, res) => {
 export const createPost = async (req, res) => {
   try {
     const { content } = req.body;
-    const { filename } = req.file; // Yüklənmiş faylın adı
+    const { filename } = req.file;
     const imageUrl = `uploads/${filename}`.replace(/\\/g, "/");
 
-    // Yeni postu yarat
+
     const newPost = new Post({
-      user: req.user.id, // Giriş edən istifadəçinin ID-sini req.user-dən al
+      user: req.user.id, 
       content,
-      image: imageUrl, // Faylın URL-ni saxla
+      image: imageUrl,
     });
 
     await newPost.save();
 
-    // İstifadəçinin posts array-ını yenilə
+
     await User.findByIdAndUpdate(
       req.user.id,
       { $push: { posts: newPost._id } },
@@ -245,7 +245,7 @@ export const createPost = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-  console.log("User ID to delete:", req.params.id); // ID konsola yazdır
+  console.log("User ID to delete:", req.params.id); 
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
@@ -259,11 +259,11 @@ export const deleteUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find(); // Bütün istifadəçiləri alır
+    const users = await User.find(); 
     if (!users) {
       return res.status(404).json({ message: "No users found" });
     }
-    res.json(users); // İstifadəçiləri qaytarır
+    res.json(users); 
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -271,10 +271,10 @@ export const getUsers = async (req, res) => {
 
 export const updateUserRole = async (req, res) => {
   const { userId } = req.params;
-  const { role } = req.body;  // Get the role from the request body
+  const { role } = req.body; 
 
   try {
-    // Check if the user is an admin before making changes
+   
     if (!req.user || req.user.role !== "admin") {
       return res.status(403).json({ message: "Access denied. Admin only!" });
     }
@@ -284,12 +284,12 @@ export const updateUserRole = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // If the role is 'admin', update the isAdmin field to true
+   
     if (role === "admin") {
       user.isAdmin = true;
     }
 
-    await user.save();  // Save the updated user
+    await user.save();  
 
     res.status(200).json({ message: "User role updated", user });
   } catch (error) {
@@ -313,7 +313,7 @@ export const banUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // İstifadəçi banlanır
+
     user.isBanned = true;  
     await user.save();  
 

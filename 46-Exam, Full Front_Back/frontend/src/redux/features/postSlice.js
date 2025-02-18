@@ -29,6 +29,7 @@ export const createPost = createAsyncThunk(
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       });
       return response.data;
@@ -92,12 +93,14 @@ export const fetchUserPosts = createAsyncThunk(
 
 export const likePost = createAsyncThunk("posts/likePost", async (postId) => {
   const { data } = await axios.put(`http://localhost:5000/api/posts/like/${postId}`, {}, { withCredentials: true });
+  window.location.reload()
   return data;
 });
 
 // Dislike
 export const dislikePost = createAsyncThunk("posts/dislikePost", async (postId) => {
   const { data } = await axios.put(`http://localhost:5000/api/posts/dislike/${postId}`, {}, { withCredentials: true });
+    window.location.reload()
   return data;
 });
 

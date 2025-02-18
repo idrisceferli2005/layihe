@@ -71,7 +71,7 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // Login və Register səhifələri Layout-dan ayrıldı
+ 
   {
     path: "/register",
     element: <Register />,

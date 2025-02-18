@@ -4,7 +4,7 @@ import "./Navbar.scss";
 import logoImg from "../../assets/images/logo.png.webp";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { FaUserCircle, FaCommentDots } from "react-icons/fa";
+import { FaUserCircle, FaCommentDots, FaSearch, FaHome, FaBell, FaImage } from "react-icons/fa";
 import { loginUser, logoutUser } from "../../redux/features/userSlice";
 
 const Navbar = () => {
@@ -52,43 +52,35 @@ const Navbar = () => {
     <div className="navbar-section">
       <div className="container">
         <div className="navbar">
-          <div className="logo">
-            <img src={logoImg} alt="" />
-          </div>
-          <ul className="navlist">
-            <li className="navlist-item">
-              <Link to="/">Home</Link>
-            </li>
-            {admin && (
-              <li className="navlist-item">
-                <Link to="/admin">Admin</Link>
-              </li>
-            )}
-            <li className="navlist-item">
-              <Link to="/search">Search</Link>
-            </li>
-            <li className="navlist-item">
-              <Link to="/notifications">Notifications</Link>
-            </li>
-            <li className="navlist-item">
-              <Link to="/posts">Posts</Link>
-            </li>
+        <div className="wrapper">
+            <Link to="/" className="navbar-item">
+              <FaHome size={24} />
+            </Link>
+            <Link to="/search" className="navbar-item">
+              <FaSearch size={24} />
+            </Link>
+            <Link to="/posts" className="navbar-item">
+            <FaImage size={24} />
+            </Link>
+            <Link to="/notifications" className="navbar-item">
+              <FaBell size={24} />
+            </Link>
+            <div className="navbar-item">
+              <button onClick={() => setIsChatOpen(!isChatOpen)} className="btn btn-light">
+                <FaCommentDots size={24} />
+              </button>
+            </div>
             {user && user.existUser && user.existUser._id ? (
-              <li>
-                <Link to={`/profile/${user.existUser._id}`}>
-                  <FaUserCircle />
-                </Link>
-              </li>
+              <Link to={`/profile/${user.existUser._id}`} className="navbar-item">
+                <FaUserCircle size={24} />
+              </Link>
             ) : (
               <span>User profile not available</span>
             )}
-          </ul>
+          </div>
+       
           <div className="wrapper">
-            <div className="chat-icon">
-              <button onClick={toggleChat} className="btn btn-light">
-                <FaCommentDots />
-              </button>
-            </div>
+      
             <div className="dropdown">
               <button className="btn btn-light" type="button" data-bs-toggle="dropdown">
                 <i className="fa-solid fa-user"></i>

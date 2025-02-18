@@ -1,10 +1,12 @@
+// Profile.js
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import FriendRequest from "../friendrequest/FriendRequest";
+import FriendRequest from "../friendrequest/FriendRequest"; // Yeni komponenti import et
 import styles from "./Profile.module.css";
 import { fetchProfile } from "../../redux/features/profileSlice";
 import { fetchUserPosts } from "../../redux/features/postSlice";
+import FollowButton from "../friendrequest/FriendRequest";
 
 const Profile = () => {
   const { id } = useParams();
@@ -12,7 +14,6 @@ const Profile = () => {
   const navigate = useNavigate();
   
   const { user, loading, error } = useSelector((state) => state.profile);
-  console.log(user)
   const { posts } = useSelector((state) => state.posts);
   
   useEffect(() => {
@@ -28,26 +29,19 @@ const Profile = () => {
   if (error) return <p>{error}</p>;
   if (!user) return <p>User not found</p>;
 
-  const isLogined = user.isLogined; // Check if the user is logged in
-  console.log(isLogined)
+  const isLogined = user.isLogined; 
+  const isAdmin = user.isAdmin;
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>Profile</h1>
-        {isLogined && ( // Only show edit button if it's the user's profile and they're logged in
-          <button
-            className={styles.editButton}
-            onClick={() => navigate(`/edit-profile/${id}`)} // Redirect to the edit profile page
-          >
-            Edit Profile
-          </button>
-        )}
       </div>
 
       <div className={styles.profileInfo}>
         <img src={user.image} alt="Profile" />
         <div className={styles.profileDetails}>
-          <h2>{user.username}</h2>
+          <h2>{user.username} {isAdmin && <Link to="/admin">🛠 Admin Paneli</Link>}</h2>
           <p>{user.name}</p>
           <p>{user.email}</p>
           <p>Followers: {user.followers?.length}</p>
@@ -56,16 +50,33 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* Profil sahifəsində FollowButton əlavə et */}
+      {isLogined && (
+        <button
+          className={styles.editButton}
+          onClick={() => navigate(`/edit-profile/${id}`)} 
+        >
+          Edit Profile
+        </button>
+      )}
+
+      {isOwnProfile ? (
+        <></>  
+      ) : (
+        <FollowButton currentUserId={user._id} profileUserId={id} />
+      )}
+      
       {!isLogined && (
         <FriendRequest currentUserId={user._id} friendId={id} />
       )}
+
       <div className={styles.posts}>
         {posts?.length > 0 ? (
           posts.map((post) => (
             <div key={post._id} className={styles.post}>
               <Link to={`/post/${post._id}`}>
                 <p>{post.content}</p>
-                {post.image && <img src={post.image} alt="Post" />}
+                {post.image && <img src={`http://localhost:5000/${post.image}`} alt="Post" />}
               </Link>
             </div>
           ))

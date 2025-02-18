@@ -1,10 +1,11 @@
 import express from "express";
 import { createComment, createPost, deleteComment, dislikePost, getPostById, getPosts, getUserPosts, likePost } from "../controllers/postCommentController.js";
 import { protect } from "../middleware/authMiddleware.js";
+import upload from "../upload/upload.js";
 
 const postcommentRouter = express.Router();
 
-postcommentRouter.post("/", protect, createPost);
+postcommentRouter.post("/", protect, upload.single("image"), createPost);
 postcommentRouter.post("/:postId/comments", protect, createComment);
 postcommentRouter.get("/", protect, getPosts);
 postcommentRouter.get("/:postId", protect, getPostById);

@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 
-// Dostluq sorğusu göndər
+
 export const sendFriendRequest = async (req, res) => {
   try {
     const { userId, friendId } = req.body;
@@ -24,10 +24,10 @@ export const sendFriendRequest = async (req, res) => {
   }
 };
 
-// Dostluq sorğusunu qəbul et
+
 export const acceptFriendRequest = async (req, res) => {
   try {
-    console.log("✅ acceptFriendRequest çağırıldı!", req.body); // TEST
+    console.log("✅ acceptFriendRequest çağırıldı!", req.body); 
     const { userId, friendId } = req.body;
     console.log("🔹 userId:", userId);
     console.log("🔹 friendId:", friendId);
@@ -58,7 +58,7 @@ export const acceptFriendRequest = async (req, res) => {
 
 
 
-// Dostluq sorğusunu rədd et
+
 export const declineFriendRequest = async (req, res) => {
   try {
     const { userId, friendId } = req.body;
@@ -77,7 +77,6 @@ export const declineFriendRequest = async (req, res) => {
   }
 };
 
-// Dostluqdan çıxar
 export const removeFriend = async (req, res) => {
   try {
     const { userId, friendId } = req.body;
@@ -99,7 +98,7 @@ export const removeFriend = async (req, res) => {
   }
 };
 
-// İstifadəçini izləmək
+
 export const followUser = async (req, res) => {
   try {
     const { userId, followId } = req.body;
@@ -127,7 +126,7 @@ export const followUser = async (req, res) => {
   }
 };
 
-// İstifadəçini izləməkdən çıxmaq
+
 export const unfollowUser = async (req, res) => {
   try {
     const { userId, unfollowId } = req.body;

@@ -1,36 +1,26 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";   
-import { acceptFriendRequest, sendFriendRequest } from "../../redux/features/friendSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { followUser, unfollowUser } from "../../redux/features/friendSlice";
+import styles from "./FriendRequest.module.css"
 
-
-
-const FriendRequest = ({ friendId }) => {
+function FollowButton({ userId, followId }) {
   const dispatch = useDispatch();
-  const { status, error } = useSelector((state) => state.friends);
-  const [message, setMessage] = useState("");
+  const { following } = useSelector(state => state.follow);
 
-  const handleSendRequest = async () => {
-    const result = await dispatch(sendFriendRequest({ friendId }));
-    if (result.payload) setMessage(result.payload.message);
-  };
+  const isFollowing = following.includes(followId);
 
-  const handleAcceptRequest = async () => {
-    const result = await dispatch(acceptFriendRequest({ friendId }));
-    if (result.payload) setMessage(result.payload.message);
+  const handleFollow = () => {
+    if (isFollowing) {
+      dispatch(unfollowUser(userId, followId));
+    } else {
+      dispatch(followUser(userId, followId));
+    }
   };
 
   return (
-    <div>
-      <button onClick={handleSendRequest} disabled={status === "loading"}>
-        {status === "loading" ? "Sending..." : "Send Friend Request"}
-      </button>
-      <button onClick={handleAcceptRequest} disabled={status === "loading"}>
-        {status === "loading" ? "Accepting..." : "Accept Friend Request"}
-      </button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "green" }}>{message}</p>}
-    </div>
+    <button className={styles.number} onClick={handleFollow}>
+      {isFollowing ? "Unfollow" : "Follow"}
+    </button>
   );
-};
+}
 
-export default FriendRequest;
+export default FollowButton;

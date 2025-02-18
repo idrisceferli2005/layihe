@@ -1,145 +1,170 @@
 .container {
-  max-width: 600px; /* Daha kiçik genişlik */
+  width: 100%;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
 }
 
-.postDetail {
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+h1 {
+  text-align: center;
+  font-size: 32px;
   margin-bottom: 20px;
 }
 
+.error {
+  color: red;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.postDetail {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
 .profilePic {
-  width: 30px; /* Daha kiçik şəkil */
-  height: 30px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
+  object-fit: cover;
   margin-right: 10px;
 }
 
-.postImage {
-  max-width: 100%;
-  height: auto;
-  margin-top: 15px;
-  border-radius: 6px;
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
 }
 
-.reactions {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+img {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 8px;
   margin-top: 10px;
-  gap: 15px; /* İkonlar arasında daha az boşluq */
 }
 
-.reactions button {
-  background: transparent;
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+button {
+  background-color: transparent;
   border: none;
-  font-size: 18px; /* Kiçik font ölçüsü */
+  font-size: 18px;
   cursor: pointer;
-  color: #262626;
-  transition: color 0.3s ease;
-}
-
-.reactions button:hover {
-  color: #0095f6;
-}
-
-.reactions .likesCount,
-.reactions .dislikesCount {
-  font-size: 14px; /* Kiçik rəqəm ölçüsü */
-  color: #999;
-}
-
-.commentSection {
-  margin-top: 20px;
-}
-
-.commentHeader {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
 }
 
-.commentUserImage {
-  width: 25px;
-  height: 25px; /* Kiçik şəkil */
-  border-radius: 50%;
-  margin-right: 8px;
+button:hover {
+  opacity: 0.8;
+}
+
+span {
+  font-size: 14px;
+  color: #888;
+}
+
+.comments {
+  margin-top: 30px;
+}
+
+.comments h3 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .commentItem {
-  padding: 8px;
-  background-color: #fafafa;
-  border-radius: 6px;
-  margin-bottom: 8px;
+  background-color: #f7f7f7;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
 }
 
-.commentInput {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  width: 80%;
-  margin-bottom: 8px;
-  font-size: 14px; /* Kiçik font ölçüsü */
-}
-
-.commentForm button {
-  background-color: #0095f6;
-  color: white;
-  border: none;
-  padding: 6px 12px; /* Kiçik düymə */
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.commentForm button:hover {
-  background-color: #0078cc;
+.commentHeader {
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .commentForm {
   display: flex;
-  align-items: center;
-  margin-top: 12px;
-}
-.reactions {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 20px; /* İkonlar və yazılar arasında daha geniş boşluq */
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
-.reactions .likes,
-.reactions .dislikes {
-  display: flex;
-  align-items: center; /* İkona və yazı mərkəzləşdirir */
-  gap: 5px; /* İkona ilə yazı arasında boşluq */
+.commentInput {
+  width: 85%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 16px;
 }
 
-.reactions button {
-  background: transparent;
+button[type="submit"] {
+  padding: 10px 15px;
+  background-color: #0095f6;
   border: none;
-  font-size: 20px;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
   cursor: pointer;
-  color: #262626;
-  transition: color 0.3s ease;
 }
 
-.reactions button:hover {
-  color: #0095f6;
+button[type="submit"]:hover {
+  background-color: #007bb5;
 }
 
-.reactions .likesCount,
-.reactions .dislikesCount {
-  font-size: 14px;
-  color: #999;
-}
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
 
-.reactions span {
-  font-size: 14px;
-  color: #262626;
-  margin-left: 5px; /* Yazı ilə ikon arasında boşluq */
+  .postDetail {
+    padding: 10px;
+  }
+
+  .profilePic {
+    width: 40px;
+    height: 40px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  button {
+    font-size: 16px;
+    margin-top: 5px;
+  }
+
+  .commentInput {
+    width: 75%;
+  }
+
+  button[type="submit"] {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
+.number{
+  color: black;
 }

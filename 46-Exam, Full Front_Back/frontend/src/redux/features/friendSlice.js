@@ -1,82 +1,87 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
-// Dostluq sorğusu göndərmək
-export const sendFriendRequest = createAsyncThunk(
-  "friends/sendFriendRequest",
-  async ({ friendId }, { rejectWithValue }) => {
+
+export const followUser = createAsyncThunk(
+  "follow/followUser",
+  async ({ userId, followId }, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/api/friends/send-request", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ friendId }),
-        credentials: "include", // Cookie-dən token göndərmək üçün
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
-      return data;
+      await axios.post(
+        "http://localhost:5000/api/follow",
+        { userId, followId },
+        { withCredentials: true }
+      );
+      return followId;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data.message || error.message);
     }
   }
 );
 
-// Dostluq sorğusunu qəbul etmək
-export const acceptFriendRequest = createAsyncThunk(
-  "friends/acceptFriendRequest",
-  async ({ friendId }, { rejectWithValue }) => {
+export const unfollowUser = createAsyncThunk(
+  "follow/unfollowUser",
+  async ({ userId, unfollowId }, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:5000/api/friends/accept-request", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ friendId }),
-        credentials: "include", // Cookie-dən token göndərmək üçün
-      });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
-      return data;
+      await axios.post(
+        "http://localhost:5000/api/unfollow",
+        { userId, unfollowId },
+        { withCredentials: true }
+      );
+      return unfollowId;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.response.data.message || error.message);
     }
   }
 );
+
+const initialState = {
+  following: [],
+  followers: [],
+  loading: false,
+  error: null,
+};
 
 const friendSlice = createSlice({
-  name: "friends",
-  initialState: {
-    friends: [],
-    status: "idle",
-    error: null,
+  name: "follow",
+  initialState,
+  reducers: {
+    setFollowing: (state, action) => {
+      state.following = action.payload;
+    },
+    setFollowers: (state, action) => {
+      state.followers = action.payload;
+    },
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(sendFriendRequest.pending, (state) => {
-        state.status = "loading";
+      .addCase(followUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
-      .addCase(sendFriendRequest.fulfilled, (state, action) => {
-        state.status = "succeeded";
+      .addCase(followUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.following.push(action.payload);
       })
-      .addCase(sendFriendRequest.rejected, (state, action) => {
-        state.status = "failed";
+      .addCase(followUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       })
-      .addCase(acceptFriendRequest.pending, (state) => {
-        state.status = "loading";
+      .addCase(unfollowUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
-      .addCase(acceptFriendRequest.fulfilled, (state, action) => {
-        state.status = "succeeded";
+      .addCase(unfollowUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.following = state.following.filter(
+          (id) => id !== action.payload
+        );
       })
-      .addCase(acceptFriendRequest.rejected, (state, action) => {
-        state.status = "failed";
+      .addCase(unfollowUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       });
   },
 });
 
+export const { setFollowing, setFollowers } = friendSlice.actions;
 export default friendSlice.reducer;
