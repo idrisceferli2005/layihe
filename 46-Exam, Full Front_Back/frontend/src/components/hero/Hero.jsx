@@ -32,8 +32,7 @@ const Hero = () => {
     dispatch(deleteComment({ postId, commentId }));
   };
 
-console.log(user.existUser._id)
-console.log(posts)
+
   return (
     <div className={styles.container}>
       <h1>Home (Feed)</h1>

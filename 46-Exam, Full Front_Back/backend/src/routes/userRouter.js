@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addAdmin,
   banUser,
   deleteUser,
   forgotPassword,
@@ -9,11 +10,11 @@ import {
   logout,
   register,
   resetPassword,
-  updateUserRole,
   verifyEmail,
 } from "../controllers/userController.js";
 import upload from "../upload/upload.js";
 import { admin, protect } from "../middleware/authMiddleware.js";
+import { friendProtect } from "../middleware/friendMiddleware.js";
 
 const userRouter = express.Router();
 
@@ -26,7 +27,7 @@ userRouter.post("/resetpassword", resetPassword);
 userRouter.get("/me", protect, getCurrentUser);
 userRouter.delete("/:id", protect, deleteUser);
 userRouter.get("/", protect, getUsers);
-userRouter.put("/:userId/role", protect, admin, updateUserRole);
-userRouter.put("/:userId/ban", protect, admin, banUser);
+userRouter.put("/:userId/role",  addAdmin);
+userRouter.put("/:userId/ban",   banUser);
 
 export default userRouter;

@@ -1,53 +1,43 @@
-import React, { useState, useEffect } from "react";
-import { Dialog, DialogActions, DialogContent, Button } from "@mui/material";
-import { io } from "socket.io-client";
+import React, { useEffect, useState } from "react";
+import socket from "./socket"; // Yuxarıda yaratdığın socket faylını import et
 
-const Chat = ({ open, onClose }) => {
+const Chat = () => {
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
-  const socket = io("http://localhost:5000", { withCredentials: true });
 
   useEffect(() => {
-    socket.on("receiveMessage", (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
+    // Mesaj gəldikdə onu state-ə əlavə et
+    socket.on("receiveMessage", (msg) => {
+      setMessages((prev) => [...prev, msg]);
     });
 
-    return () => socket.disconnect();  // Component unmount olduqda əlaqəni kəsirik
+    return () => {
+      socket.off("receiveMessage");
+    };
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (newMessage.trim()) {
-      socket.emit("sendMessage", newMessage); // Mesaj göndəririk
-      setNewMessage(""); // Mesaj göndərildikdən sonra inputu təmizləyirik
+  const sendMessage = () => {
+    if (message.trim()) {
+      socket.emit("sendMessage", message);
+      setMessage("");
     }
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogContent>
-        <div className="messageContainer">
-          {messages.map((msg, index) => (
-            <div key={index} className="message">
-              {msg}
-            </div>
-          ))}
-        </div>
-      </DialogContent>
-      <DialogActions>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Write a message..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-          />
-          <Button type="submit" color="primary">
-            Send
-          </Button>
-        </form>
-      </DialogActions>
-    </Dialog>
+    <div>
+      <h2>Chat</h2>
+      <div>
+        {messages.map((msg, index) => (
+          <p key={index}>{msg}</p>
+        ))}
+      </div>
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+      <button onClick={sendMessage}>Send</button>
+    </div>
   );
 };
 

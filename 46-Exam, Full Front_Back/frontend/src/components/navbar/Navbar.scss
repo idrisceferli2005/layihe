@@ -93,6 +93,40 @@
 .logout:hover {
   background-color: #f7d1d1;
 }
+.chat-popup {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  width: 300px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+}
+
+.chat-header button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.chat-body {
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
 
 /* Mobil Cihazlar üçün */
 @media (max-width: 768px) {

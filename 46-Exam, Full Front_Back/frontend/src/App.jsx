@@ -10,12 +10,13 @@ import Resetpassword from "./pages/auth/resetpassword/Resetpassword";
 import Profile from "./pages/profile/Profile";
 import ErrorBoundary from "./pages/ErrorBoundary";
 
-import Notifications from "./pages/Notifications";
+
 import Posts from "./pages/post/Posts";
 import Search from "./pages/search/Search";
 import PostDetail from "./pages/postDetail/PostDetail";
 import EditProfile from "./components/editprofile/EditProfile";
 import ProtectAdmin from "./routes/ProtectAdmin";
+import Notifications from "./pages/notifications/Notifications";
 
 const router = createBrowserRouter([
   {

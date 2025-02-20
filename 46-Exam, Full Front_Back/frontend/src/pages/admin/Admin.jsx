@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "react-bootstrap/Table";
-import { banUser, deleteUser, getUsers, updateUserRole } from "../../redux/features/userSlice";
+import { banUser, deleteUser, getUsers, setAdmin } from "../../redux/features/userSlice";
 import "./Admin.scss";
 
 const AdminPanel = () => {
@@ -28,7 +28,9 @@ const AdminPanel = () => {
     }
     
    
-    dispatch(updateUserRole({ userId, role: 'admin' }));
+    dispatch(setAdmin(userId)).then(() => {
+      dispatch(getUsers());
+    });
   };
   
 
@@ -77,8 +79,8 @@ const AdminPanel = () => {
                 <td>
                   <button className="btn btn-danger" onClick={() => handleDelete(user._id)}>Delete</button>
                   <button className="btn btn-warning" onClick={() => handleUpdateRole(user._id)}>
-  Promote to Admin
-</button>
+                    {user.isAdmin ? 'Demote from Admin' : 'Promote to Admin'}
+                  </button>
                   <button className="btn btn-warning" onClick={() => handleBanUser(user._id)}>Ban</button>
                 </td>
               </tr>

@@ -7,7 +7,7 @@ export const followUser = createAsyncThunk(
   async ({ userId, followId }, { rejectWithValue }) => {
     try {
       await axios.post(
-        "http://localhost:5000/api/follow",
+        "http://localhost:5000/api/friends/follow",
         { userId, followId },
         { withCredentials: true }
       );
@@ -23,7 +23,7 @@ export const unfollowUser = createAsyncThunk(
   async ({ userId, unfollowId }, { rejectWithValue }) => {
     try {
       await axios.post(
-        "http://localhost:5000/api/unfollow",
+        "http://localhost:5000/api/friends/unfollow",
         { userId, unfollowId },
         { withCredentials: true }
       );

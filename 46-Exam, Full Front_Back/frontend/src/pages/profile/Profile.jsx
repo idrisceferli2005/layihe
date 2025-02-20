@@ -31,7 +31,8 @@ const Profile = () => {
 
   const isLogined = user.isLogined; 
   const isAdmin = user.isAdmin;
-
+console.log(id)
+console.log(user._id)
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -50,7 +51,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Profil sahifəsində FollowButton əlavə et */}
+      
       {isLogined && (
         <button
           className={styles.editButton}

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
-export const protect = async (req, res, next) => {
+export const friendProtect = async (req, res, next) => {
   let token = req.cookies.token; 
   if (!token) {
     return res.status(401).json({ message: "Not authorized, no token" });
@@ -9,10 +9,8 @@ export const protect = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select("-password");
-    console.log(user); 
-    req.user = user;
-    if (!user) {
+    console.log(decoded)
+    if (!decoded.id) {
       return res.status(401).json({ message: "Not authorized, user not found" });
     }
     next();

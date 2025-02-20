@@ -9,7 +9,7 @@ const Search = () => {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState("");
 
-  // Fetch posts and users when the component mounts (and whenever query changes)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,11 +25,11 @@ const Search = () => {
     };
 
     fetchData();
-  }, [query]); // Trigger the effect whenever 'query' changes
+  }, [query]); 
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // You can perform any additional handling here if necessary
+
   };
 
   return (

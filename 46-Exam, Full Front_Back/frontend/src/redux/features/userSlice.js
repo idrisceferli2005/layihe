@@ -93,40 +93,24 @@ export const fetchCurrentUser = createAsyncThunk(
     }
   }
 );
-export const updateUserRole = createAsyncThunk(
-  "user/updateUserRole",
-  async ({ userId, role }, { rejectWithValue }) => {
+export const setAdmin = createAsyncThunk(
+  "user/setAdmin",
+  async (userId, { rejectWithValue }) => {
     try {
-      // Update the user's role by sending a PUT request to the backend
-      const response = await axios.put(
-        `http://localhost:5000/auth/${userId}/role`, 
-        { role }, // Send the role in the request body
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      return response.data;  // return the updated user data
+      const { data } = await axios.put(`http://localhost:5000/api/users/${userId}/role`);
+      return { userId, updatedUser: data.user };
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Failed to update role");
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
 
-
-
 export const banUser = createAsyncThunk(
-  "user/banUser",
-  async (userId, { rejectWithValue }) => {
+  "users/banUser",
+  async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`http://localhost:5000/auth/${userId}/ban`, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await axios.put(`http://localhost:5000/api/users/${id}/ban`, {
+        
       });
       return response.data;
     } catch (error) {
@@ -134,6 +118,7 @@ export const banUser = createAsyncThunk(
     }
   }
 );
+
 
 const userSlice = createSlice({
   name: "user",
@@ -179,33 +164,22 @@ const userSlice = createSlice({
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.users = state.users.filter((item) => item._id !== action.payload); 
       })
-      .addCase(updateUserRole.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(updateUserRole.fulfilled, (state, action) => {
+      .addCase(setAdmin.fulfilled, (state, action) => {
         state.loading = false;
-        const updatedUser = action.payload.user;
-        state.users = state.users.map((user) =>
-          user._id === updatedUser._id ? updatedUser : user
-        );
-      })
-      .addCase(updateUserRole.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(banUser.pending, (state) => {
-        state.loading = true;
+        const { userId, updatedUser } = action.payload;
+
+        if (state.users.users) {
+          const index = state.users.users.findIndex((user) => user._id === userId);
+          if (index !== -1) {
+            state.users.users[index] = updatedUser;
+          }
+        }
       })
       .addCase(banUser.fulfilled, (state, action) => {
-        state.loading = false;
-        const bannedUser = action.payload.user;
-        state.users = state.users.map((user) =>
-          user._id === bannedUser._id ? bannedUser : user
-        );
-      })
-      .addCase(banUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        const index = state.users.findIndex((user) => user._id === action.payload._id);
+        if (index !== -1) {
+          state.users[index] = action.payload;
+        }
       })
       .addCase(searchUser.fulfilled, (state, action) => {
         state.users = action.payload; 

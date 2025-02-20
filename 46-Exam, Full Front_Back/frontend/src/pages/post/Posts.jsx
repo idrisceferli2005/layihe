@@ -43,8 +43,8 @@ const Posts = () => {
         />
     <input
   type="file"
-  onChange={(e) => setImage(e.target.files[0])} // Faylı seç
-  accept="image/*" // Yalnız şəkil fayllarını qəbul et
+  onChange={(e) => setImage(e.target.files[0])}
+  accept="image/*"
 />
         <button type="submit">Post</button>
       </form>

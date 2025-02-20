@@ -10,9 +10,9 @@ function FollowButton({ userId, followId }) {
 
   const handleFollow = () => {
     if (isFollowing) {
-      dispatch(unfollowUser(userId, followId));
+      dispatch(unfollowUser({ userId, followId }));
     } else {
-      dispatch(followUser(userId, followId));
+      dispatch(followUser({ userId, followId }));
     }
   };
 

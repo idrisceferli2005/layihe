@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNotifications } from "../redux/features/notificationSlice";
-
+import { fetchNotifications } from "../../redux/features/notificationSlice";
+import "./Notifications.scss";
 const Notifications = () => {
   const dispatch = useDispatch();
   const { notifications, loading, error } = useSelector((state) => state.notifications);
