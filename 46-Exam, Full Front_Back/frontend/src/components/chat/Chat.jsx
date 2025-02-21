@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import socket from "./socket"; // Yuxarıda yaratdığın socket faylını import et
+import socket from "./socket"; 
 
 const Chat = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    // Mesaj gəldikdə onu state-ə əlavə et
     socket.on("receiveMessage", (msg) => {
       setMessages((prev) => [...prev, msg]);
     });

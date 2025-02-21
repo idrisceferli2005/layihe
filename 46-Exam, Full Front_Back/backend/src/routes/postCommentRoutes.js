@@ -1,5 +1,5 @@
 import express from "express";
-import { createComment, createPost, deleteComment, dislikePost, getPostById, getPosts, getUserPosts, likePost } from "../controllers/postCommentController.js";
+import { createComment, createPost, deleteComment, deletePost, dislikePost, getPostById, getPosts, getUserPosts, likePost } from "../controllers/postCommentController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import upload from "../upload/upload.js";
 
@@ -13,5 +13,6 @@ postcommentRouter.get("/user/:userId", protect, getUserPosts);
 postcommentRouter.delete("/:postId/comments/:commentId", protect, deleteComment);
 postcommentRouter.put("/like/:postId", protect, likePost);
 postcommentRouter.put("/dislike/:postId", protect, dislikePost);
+postcommentRouter.delete("/:postId", protect, deletePost);
 
 export default postcommentRouter; 

@@ -26,17 +26,13 @@ export const sendFriendRequest = async (req, res) => {
 
 
 export const acceptFriendRequest = async (req, res) => {
-  try {
-    console.log("✅ acceptFriendRequest çağırıldı!", req.body); 
+  try { 
     const { userId, friendId } = req.body;
-    console.log("🔹 userId:", userId);
-    console.log("🔹 friendId:", friendId);
 
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
 
     if (!user || !friend) {
-      console.log("❌ User not found");
       return res.status(404).json({ message: "User not found" });
     }
 
@@ -51,7 +47,7 @@ export const acceptFriendRequest = async (req, res) => {
 
     res.status(200).json({ message: "Friend request accepted" });
   } catch (error) {
-    console.error("❌ acceptFriendRequest error:", error);
+    console.error(" acceptFriendRequest error:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -122,7 +118,6 @@ export const followUser = async (req, res) => {
       return res.status(400).json({ message: "You are already following this user" });
     }
 
-    // İstifadəçilərin siyahılarını yenilə
     await User.findByIdAndUpdate(userId, { $push: { following: followId } }, { new: true });
     await User.findByIdAndUpdate(followId, { $push: { followers: userId } }, { new: true });
 

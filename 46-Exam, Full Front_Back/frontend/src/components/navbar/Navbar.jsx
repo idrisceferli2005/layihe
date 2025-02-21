@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.scss";
-import logoImg from "../../assets/images/logo.png.webp";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { FaUserCircle, FaCommentDots, FaSearch, FaHome, FaBell, FaImage } from "react-icons/fa";
@@ -106,7 +105,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Chat Popup */}
       {isChatOpen && (
         <div className="chat-popup">
           <div className="chat-header">

@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import { registerschema } from "../../../schema/RegisterSchema";
-// import CheckMail from "../../../components/checkMail/CheckMail";
+
 
 const Register = () => {
   const baseUrl = "http://localhost:5000/auth";
@@ -10,7 +10,7 @@ const Register = () => {
   const submitForm = async (values, actions) => {
     try {
       const formData = new FormData();
-      console.log('Form values before append:', values); // Log the values to verify
+      console.log('Form values before append:', values); 
   
       if (values.image) {
         formData.append("image", values.image);
@@ -22,7 +22,7 @@ const Register = () => {
       formData.append("email", values.email);
       formData.append("password", values.password);
   
-      // Check FormData content before sending
+      
       for (let pair of formData.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
       }

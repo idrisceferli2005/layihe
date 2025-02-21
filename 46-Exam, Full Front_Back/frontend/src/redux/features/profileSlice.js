@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Profil məlumatlarını yükləyin
+
 export const fetchProfile = createAsyncThunk(
   "profile/fetchProfile",
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.get(`http://localhost:5000/api/profile/${id}`, {
-        withCredentials: true,  // Cookie-lərin göndərilməsi üçün
+        withCredentials: true,
       });
       return response.data;
     } catch (error) {
@@ -16,13 +16,13 @@ export const fetchProfile = createAsyncThunk(
   }
 );
 
-// Profil məlumatlarını yeniləyin
+
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async ({ id, user }, { rejectWithValue }) => {
     try {
       const response = await axios.put(`http://localhost:5000/api/profile/${id}`, user, {
-        withCredentials: true,  // Cookie-lərin göndərilməsi üçün
+        withCredentials: true, 
       });
       return response.data;
     } catch (error) {
@@ -34,7 +34,7 @@ export const updateProfile = createAsyncThunk(
 const profileSlice = createSlice({
   name: "profile",
   initialState: {
-    user: null, // və ya {}, amma tətbiqdə ardıcıl olmasına diqqət edin
+    user: null,
     loading: false,
     error: null,
   },
@@ -48,28 +48,28 @@ const profileSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Profil yükləmək
+
       .addCase(fetchProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload; // Tam profil geri döndüyünü varsayırıq
+        state.user = action.payload;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // Profil yeniləmək
+   
       .addCase(updateProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = { ...state.user, ...action.payload }; // Yenilənmiş məlumatları birləşdiririk
+        state.user = { ...state.user, ...action.payload }; 
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;

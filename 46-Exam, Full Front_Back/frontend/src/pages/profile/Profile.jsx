@@ -1,11 +1,10 @@
-// Profile.js
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import FriendRequest from "../friendrequest/FriendRequest"; // Yeni komponenti import et
+import FriendRequest from "../friendrequest/FriendRequest"; 
 import styles from "./Profile.module.css";
 import { fetchProfile } from "../../redux/features/profileSlice";
-import { fetchUserPosts } from "../../redux/features/postSlice";
+import { deletePost, fetchUserPosts } from "../../redux/features/postSlice";
 import FollowButton from "../friendrequest/FriendRequest";
 
 const Profile = () => {
@@ -31,8 +30,11 @@ const Profile = () => {
 
   const isLogined = user.isLogined; 
   const isAdmin = user.isAdmin;
-console.log(id)
-console.log(user._id)
+
+  const handleDeletePost = (postId) => {
+    dispatch(deletePost(postId));
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -51,7 +53,6 @@ console.log(user._id)
         </div>
       </div>
 
-      
       {isLogined && (
         <button
           className={styles.editButton}
@@ -79,6 +80,14 @@ console.log(user._id)
                 <p>{post.content}</p>
                 {post.image && <img src={`http://localhost:5000/${post.image}`} alt="Post" />}
               </Link>
+              {isLogined && (
+                <div className={styles.postMenu}>
+                  <span>⋮</span>
+                  <div className={styles.postMenuContent}>
+                    <button className="btn btn-danger" onClick={() => handleDeletePost(post._id)}>Delete</button>
+                  </div>
+                </div>
+              )}
             </div>
           ))
         ) : (

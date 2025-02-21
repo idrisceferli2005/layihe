@@ -1,4 +1,4 @@
-/* Ümumi Navbar Dizaynı */
+
 .navbar-section {
   background-color: #ffffff;
   padding: 10px 0;
@@ -59,7 +59,7 @@
   color: #333;
 }
 
-/* Profil ve Logout Düyməsi */
+
 .dropdown button {
   background: none;
   border: none;
@@ -85,7 +85,7 @@
   background-color: #f2f2f2;
 }
 
-/* Logout */
+
 .logout {
   color: #ff4d4f;
 }
@@ -128,11 +128,11 @@
   overflow-y: auto;
 }
 
-/* Mobil Cihazlar üçün */
+
 @media (max-width: 768px) {
-  /* Navbar Menyusunu sadeleştir */
+
   .navlist {
-    display: none; /* Diğer menü öğeleri gizlensin */
+    display: none; 
   }
 
   .navbar-item {
@@ -153,7 +153,7 @@
     padding: 10px 0;
   }
 
-  /* Alt Menyu */
+
   .navbar-item {
     display: block;
     font-size: 24px;
@@ -183,8 +183,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
-  /* Home, Search, Notifications, Posts ve Profile dışındaki diğer öğeler gizlensin */
-
+  
   .chat-icon,
   .dropdown {
     display: none;

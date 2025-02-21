@@ -11,7 +11,9 @@
   text-align: center;
   margin-bottom: 30px;
 }
-
+.post{
+  position: relative;
+}
 .header h1 {
   font-size: 36px;
   font-weight: 600;
@@ -104,7 +106,39 @@
   color: inherit;
 }
 
-/* Mobil və tablet üçün responsiv dizayn */
+.postMenu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.postMenuContent {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 0;
+
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.postMenu:hover .postMenuContent {
+  display: block;
+}
+
+.postMenuContent button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+
 @media (max-width: 768px) {
   .profileInfo {
     flex-direction: column;
@@ -128,7 +162,7 @@
   }
 
   .posts {
-    grid-template-columns: repeat(2, 1fr); /* Tablet üçün 2 sütun */
+    grid-template-columns: repeat(2, 1fr); 
   }
 
   .posts .post {
@@ -165,7 +199,7 @@
   }
 
   .posts {
-    grid-template-columns: repeat(1, 1fr); /* Mobil üçün 1 sütun */
+    grid-template-columns: repeat(1, 1fr);
   }
 
   .posts .post {

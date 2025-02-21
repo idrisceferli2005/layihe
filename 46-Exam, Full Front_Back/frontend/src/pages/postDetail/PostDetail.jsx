@@ -40,10 +40,10 @@ const dispatch = useDispatch()
         { content: commentContent },
         { withCredentials: true }
       );
-      setCommentContent(""); // inputu təmizləyirik
+      setCommentContent(""); 
       setPost((prevPost) => ({
         ...prevPost,
-        comments: [...prevPost.comments, response.data], // Yeni şərh əlavə edirik
+        comments: [...prevPost.comments, response.data], 
       }));
     } catch (error) {
       setError("Şərh əlavə edilərkən xəta baş verdi.");

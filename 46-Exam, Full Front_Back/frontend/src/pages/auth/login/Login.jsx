@@ -5,6 +5,7 @@ import { loginschema } from "../../../schema/LoginSchema";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../redux/features/UserSlice";
 import { Link, useNavigate } from "react-router-dom";
+import styles from "./Login.module.css";
 
 const Login = () => {
   const baseUrl = "http://localhost:5000/auth";
@@ -14,11 +15,11 @@ const Login = () => {
   const submitForm = async (values, actions) => {
     try {
       const res = await axios.post("http://localhost:5000/auth/login", values, {
-        withCredentials: true, // 🚀 Cookie-lərin saxlanmasını aktiv edin
+        withCredentials: true, 
       });
   
       if (res.status === 200) {
-        dispatch(setUser(res.data)); // 🚀 İstifadəçini Redux-a yazın
+        dispatch(setUser(res.data));
         alert("Login successful");
         navigate("/");
       } else {
@@ -30,7 +31,6 @@ const Login = () => {
       console.error("Login failed:", error);
     }
   };
-  
 
   const { values, handleChange, handleSubmit, errors } = useFormik({
     initialValues: {
@@ -42,11 +42,11 @@ const Login = () => {
   });
 
   return (
-    <div className="container">
+    <div className={styles.container}>
       <form
         encType="multipart/form-data"
         action=""
-        className="form"
+        className={styles.form}
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
@@ -54,7 +54,7 @@ const Login = () => {
       >
         <h3>Login</h3>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="username">Username</label>
           <div className="text-danger">{errors.username}</div>
           <input
@@ -67,7 +67,7 @@ const Login = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="password">Password</label>
           <div className="text-danger">{errors.password}</div>
           <input
@@ -83,12 +83,12 @@ const Login = () => {
           <Link to="/forgotpassword">Forgot password?</Link>
         </span>
 
-        <button type="submit" className="btn btn-primary">
-          Sign-Up
+        <button type="submit" className={styles.btn}>
+          Login
         </button>
 
         <span>
-          Don't have an account? <Link to="/register">register</Link>
+          Don't have an account? <Link to="/register">Register</Link>
         </span>
       </form>
     </div>

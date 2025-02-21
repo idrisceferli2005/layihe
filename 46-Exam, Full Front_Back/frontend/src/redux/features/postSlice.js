@@ -97,14 +97,30 @@ export const likePost = createAsyncThunk("posts/likePost", async (postId) => {
   return data;
 });
 
-// Dislike
+
 export const dislikePost = createAsyncThunk("posts/dislikePost", async (postId) => {
   const { data } = await axios.put(`http://localhost:5000/api/posts/dislike/${postId}`, {}, { withCredentials: true });
     window.location.reload()
   return data;
 });
 
-
+export const deletePost = createAsyncThunk(
+  "posts/deletePost",
+  async (postId, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().user.token;
+      await axios.delete(`http://localhost:5000/api/posts/${postId}`, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return postId;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "An error occurred");
+    }
+  }
+);
 
 const postSlice = createSlice({
   name: "posts",
@@ -174,6 +190,9 @@ const postSlice = createSlice({
       .addCase(dislikePost.fulfilled, (state, action) => {
         const index = state.posts.findIndex((post) => post._id === action.payload._id);
         if (index !== -1) state.posts[index] = action.payload;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.posts = state.posts.filter((post) => post._id !== action.payload);
       })
       .addCase(deleteComment.fulfilled, (state, action) => {
         const postIndex = state.posts.findIndex(post => post._id === action.payload.postId);

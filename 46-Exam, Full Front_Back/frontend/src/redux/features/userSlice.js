@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Cookie-dən token oxumaq üçün funksiya
+
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -9,11 +9,11 @@ const getCookie = (name) => {
   return null;
 };
 
-const baseURL = "http://localhost:5000/api/users"; // İstifadəçi məlumatlarını idarə etmək üçün backend URL
+const baseURL = "http://localhost:5000/api/users"; 
 
 const initialState = {
   user: null,
-  users: [], // Admin panelində istifadəçilərin siyahısını tutacaq
+  users: [], 
   token: getCookie("token") || null, 
   loading: false,
   error: null,
@@ -21,13 +21,13 @@ const initialState = {
 
 export const getUsers = createAsyncThunk("user/getUsers", async (_, { getState, rejectWithValue }) => {
   try {
-    // Axios sorğusunda withCredentials parametrini true edirik
+
     const { data } = await axios.get(baseURL, {
-      withCredentials: true,  // Cookie-ləri backend-ə göndərmək üçün
+      withCredentials: true, 
     });
     return data;
   } catch (error) {
-    // Xəta olarsa, konsolda log veririk
+
     return rejectWithValue(error.response.data);
   
   

@@ -272,7 +272,7 @@ export const getUsers = async (req, res) => {
 
 export const addAdmin = async (req, res) => {
   try {
-    const { userId } = req.params; // Hedef istifadəçinin ID-si
+    const { userId } = req.params; 
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "Düzgün ID deyil!" });
@@ -284,7 +284,7 @@ export const addAdmin = async (req, res) => {
       return res.status(404).json({ message: "İstifadəçi tapılmadı!" });
     }
 
-    // `isAdmin` dəyərini tərsinə çeviririk
+
     userToBeAdmin.isAdmin = !userToBeAdmin.isAdmin;
     await userToBeAdmin.save();
 

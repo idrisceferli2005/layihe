@@ -4,7 +4,6 @@
     padding: 20px;
   }
   
-  /* Axtarış forması */
   .searchForm {
     display: flex;
     gap: 10px;
@@ -27,12 +26,10 @@
     cursor: pointer;
   }
   
-  /* Axtarış nəticələri */
   .section {
     margin-top: 20px;
   }
   
-  /* --- İstifadəçilərin grid layout-da görünməsi --- */
   .userGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -67,7 +64,6 @@
     font-size: 14px;
   }
   
-  /* --- Postların grid layout-da görünməsi --- */
   .postGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

@@ -165,3 +165,19 @@ export const dislikePost = async (req, res) => {
   }
 };
 
+export const deletePost = async (req, res) => {
+  try {
+    const { postId } = req.params;
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    await Post.findByIdAndDelete(postId);
+
+    res.json({ message: "Post deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

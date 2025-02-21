@@ -44,21 +44,6 @@ export const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    // searchProduct: (state, action) => {
-    //   state.products = state.allProducts.filter((item) =>
-    //     item.title.toLowerCase().includes(action.payload.toLowerCase())
-    //   );
-    // },
-    // sortProductAZ: (state) => {
-    //   state.products = state.products.sort((a, b) =>
-    //     a.title.localeCompare(b.title)
-    //   );
-    // },
-    // sortProductZA: (state) => {
-    //   state.products = state.products.sort((a, b) =>
-    //     b.title.localeCompare(a.title)
-    //   );
-    // },
 
     sortProductLowest: (state) => {
       state.products = state.products.sort((a, b) => a.price - b.price);
