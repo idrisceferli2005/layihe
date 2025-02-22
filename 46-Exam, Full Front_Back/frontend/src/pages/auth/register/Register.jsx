@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import { registerschema } from "../../../schema/RegisterSchema";
-
+import styles from "./Register.module.css"; // CSS modul import edildi
 
 const Register = () => {
   const baseUrl = "http://localhost:5000/auth";
@@ -10,7 +10,7 @@ const Register = () => {
   const submitForm = async (values, actions) => {
     try {
       const formData = new FormData();
-      console.log('Form values before append:', values); 
+     
   
       if (values.image) {
         formData.append("image", values.image);
@@ -22,7 +22,6 @@ const Register = () => {
       formData.append("email", values.email);
       formData.append("password", values.password);
   
-      
       for (let pair of formData.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
       }
@@ -52,11 +51,10 @@ const Register = () => {
     });
 
   return (
-    <div className="container">
+    <div className={styles.container}>
       <form
         encType="multipart/form-data"
-        action=""
-        className="form"
+        className={styles.form}
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
@@ -64,7 +62,7 @@ const Register = () => {
       >
         <h3>Register</h3>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="image">Image</label>
           <input
             type="file"
@@ -74,9 +72,9 @@ const Register = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="name">Name</label>
-          <div className="text-danger">{errors.name}</div>
+          <div className={styles["text-danger"]}>{errors.name}</div>
           <input
             type="text"
             id="name"
@@ -87,9 +85,9 @@ const Register = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="username">Username</label>
-          <div className="text-danger">{errors.username}</div>
+          <div className={styles["text-danger"]}>{errors.username}</div>
           <input
             type="text"
             id="username"
@@ -100,9 +98,9 @@ const Register = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="email">Email</label>
-          <div className="text-danger">{errors.email}</div>
+          <div className={styles["text-danger"]}>{errors.email}</div>
           <input
             type="email"
             id="email"
@@ -113,9 +111,9 @@ const Register = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="password">Password</label>
-          <div className="text-danger">{errors.password}</div>
+          <div className={styles["text-danger"]}>{errors.password}</div>
           <input
             type="password"
             id="password"
@@ -126,9 +124,9 @@ const Register = () => {
           />
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="confirmpassword">Confirm Password</label>
-          <div className="text-danger">{errors.confirmpassword}</div>
+          <div className={styles["text-danger"]}>{errors.confirmpassword}</div>
           <input
             type="password"
             id="confirmpassword"
@@ -139,7 +137,7 @@ const Register = () => {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className={styles.btn}>
           Sign-Up
         </button>
 

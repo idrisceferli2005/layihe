@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import FriendRequest from "../friendrequest/FriendRequest"; 
 import styles from "./Profile.module.css";
 import { fetchProfile } from "../../redux/features/profileSlice";
-import { deletePost, fetchUserPosts } from "../../redux/features/postSlice";
-import FollowButton from "../friendrequest/FriendRequest";
+import { clearPosts, deletePost, fetchUserPosts } from "../../redux/features/postSlice";
 
 const Profile = () => {
   const { id } = useParams();
@@ -16,6 +14,7 @@ const Profile = () => {
   const { posts } = useSelector((state) => state.posts);
   
   useEffect(() => {
+    dispatch(clearPosts());
     if (id) {
       dispatch(fetchProfile(id));
       dispatch(fetchUserPosts(id));
@@ -47,8 +46,6 @@ const Profile = () => {
           <h2>{user.username} {isAdmin && <Link to="/admin">🛠 Admin Paneli</Link>}</h2>
           <p>{user.name}</p>
           <p>{user.email}</p>
-          <p>Followers: {user.followers?.length}</p>
-          <p>Following: {user.following?.length}</p>
           <p>Posts: {posts.length}</p>
         </div>
       </div>
@@ -62,15 +59,9 @@ const Profile = () => {
         </button>
       )}
 
-      {isOwnProfile ? (
-        <></>  
-      ) : (
-        <FollowButton currentUserId={user._id} profileUserId={id} />
-      )}
+
       
-      {!isLogined && (
-        <FriendRequest currentUserId={user._id} friendId={id} />
-      )}
+
 
       <div className={styles.posts}>
         {posts?.length > 0 ? (

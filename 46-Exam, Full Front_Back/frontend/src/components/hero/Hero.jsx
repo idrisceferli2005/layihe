@@ -80,8 +80,8 @@ const Hero = () => {
             </div>
             <ul className={styles.comments}>
               {post.comments && post.comments.length > 0 ? (
-                post.comments.map((comment) => (
-                  <li key={comment._id}>
+                post.comments.map((comment, index) => (
+                  <li key={index}>
                     {comment.content}
                     {(user?.existUser?._id === comment?.user?._id || user?.existUser?._id === post?.user?._id) && (
                       <button

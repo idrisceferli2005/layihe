@@ -1,9 +1,15 @@
 
 .navbar-section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   background-color: #ffffff;
   padding: 10px 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000; 
 }
+
 
 .container {
   display: flex;
@@ -146,7 +152,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    justify-content: space-around;
+    justify-content: center;
     background-color: #fff;
     border-top: 1px solid #f2f2f2;
     z-index: 100;

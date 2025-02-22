@@ -12,7 +12,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [isChatOpen, setIsChatOpen] = useState(false);
+
 
   const handleLogout = async () => {
     if (!user || !user.existUser || !user.existUser._id) {
@@ -36,7 +36,7 @@ const Navbar = () => {
     }
   };
 
-  const admin = user?.existUser?.isAdmin;
+
 
   return (
     <div className="navbar-section">
@@ -56,12 +56,8 @@ const Navbar = () => {
               <FaBell size={24} />
             </Link>
 
-            {/* Chat Icon */}
-            <div className="navbar-item">
-              <button onClick={() => setIsChatOpen(!isChatOpen)} className="btn btn-light">
-                <FaCommentDots size={24} />
-              </button>
-            </div>
+            
+       
 
             {user && user.existUser && user.existUser._id ? (
               <Link to={`/profile/${user.existUser._id}`} className="navbar-item">
@@ -104,18 +100,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
-      {isChatOpen && (
-        <div className="chat-popup">
-          <div className="chat-header">
-            <h4>Chat</h4>
-            <button onClick={() => setIsChatOpen(false)}>X</button>
-          </div>
-          <div className="chat-body">
-            <p>Chat messages will appear here...</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -7,7 +7,6 @@ import "./Admin.scss";
 const AdminPanel = () => {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.user); 
-  console.log("Users:", users);
 
   const [searchTerm, setSearchTerm] = useState('');
 
