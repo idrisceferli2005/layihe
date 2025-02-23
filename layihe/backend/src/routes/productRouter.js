@@ -1,5 +1,4 @@
 import express from "express";
-// import verifyToken from "../middleware/protected/verifyToken.js";
 
 import {
   addProduct,
@@ -10,8 +9,6 @@ import {
 import upload from "../upload/upload.js";
 
 const productRouter = express.Router();
-
-// productRouter.use(verifyToken);
 
 productRouter.post("/", upload.single("image"), addProduct);
 productRouter.get("/", getProducts);
