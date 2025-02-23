@@ -1,0 +1,99 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fafafa;
+}
+
+.form {
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.form h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #262626;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  color: #8e8e8e;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  background-color: #fafafa;
+  font-size: 14px;
+}
+
+.form-group .text-danger {
+  color: #ed4956;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 40px;
+}
+
+.password-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #0095f6;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn:hover {
+  background-color: #007bb5;
+}
+
+span {
+  display: block;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #262626;
+}
+
+span a {
+  color: #0095f6;
+  text-decoration: none;
+}
+
+span a:hover {
+  text-decoration: underline;
+}
