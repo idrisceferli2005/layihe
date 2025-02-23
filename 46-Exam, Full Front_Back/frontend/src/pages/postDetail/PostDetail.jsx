@@ -3,15 +3,16 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import styles from "./PostDetail.module.css";
 import { dislikePost, likePost } from "../../redux/features/postSlice";
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 
 const PostDetail = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [commentContent, setCommentContent] = useState("");
   const [error, setError] = useState("");
-const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -23,7 +24,7 @@ const dispatch = useDispatch()
         console.error("Postu almaqda xəta:", error);
         setError("Post alınarkən xəta baş verdi.");
       }
-    } ;
+    };
 
     fetchPost();
   }, [id, dispatch]);
@@ -40,13 +41,45 @@ const dispatch = useDispatch()
         { content: commentContent },
         { withCredentials: true }
       );
-      setCommentContent(""); 
+      setCommentContent("");
       setPost((prevPost) => ({
         ...prevPost,
-        comments: [...prevPost.comments, response.data], 
+        comments: [...prevPost.comments, response.data],
       }));
     } catch (error) {
       setError("Şərh əlavə edilərkən xəta baş verdi.");
+    }
+  };
+
+  const handleLikePost = async () => {
+    try {
+      const response = await dispatch(likePost(post._id)).unwrap();
+      setPost(response);
+    } catch (error) {
+      setError("Postu bəyənərkən xəta baş verdi.");
+    }
+  };
+
+  const handleDislikePost = async () => {
+    try {
+      const response = await dispatch(dislikePost(post._id)).unwrap();
+      setPost(response);
+    } catch (error) {
+      setError("Postu bəyənməməkdə xəta baş verdi.");
+    }
+  };
+
+  const handleCommentDelete = async (commentId) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/posts/${id}/comments/${commentId}`, {
+        withCredentials: true,
+      });
+      setPost((prevPost) => ({
+        ...prevPost,
+        comments: prevPost.comments.filter((comment) => comment._id !== commentId),
+      }));
+    } catch (error) {
+      setError("Şərh silinərkən xəta baş verdi.");
     }
   };
 
@@ -56,21 +89,22 @@ const dispatch = useDispatch()
       {error && <p className={styles.error}>{error}</p>}
       {post ? (
         <div className={styles.postDetail}>
-          <h2>{post?.user?.username}</h2>
-          <img src={post?.user?.image} alt={post?.user?.username} className={styles.profilePic} />
-          
+          <div className="d-flex align-items-center gap-2">
+            <h2>{post?.user?.username}</h2>
+            <img src={post?.user?.image} alt={post?.user?.username} className={styles.profilePic} />
+          </div>
+
           {post.image && <img src={`http://localhost:5000/${post.image}`} alt="Post" />}
           <p>{post.content}</p>
-                  <div className={styles.actions}>
-                      <button className={styles.number} onClick={() => dispatch(likePost(post._id))}>
-                  👍 {post.likes.length}
-                </button>
-                <button className={styles.number} onClick={() => dispatch(dislikePost(post._id))}>
-                  👎 {post.dislikes.length}
-                </button>
-                        <span>{post.likes?.length || 0} Likes</span>
-                      </div>
-          
+          <div className={styles.actions}>
+            <button className={styles.number} onClick={handleLikePost}>
+              👍 {post.likes.length}
+            </button>
+            <button className={styles.number} onClick={handleDislikePost}>
+              👎 {post.dislikes.length}
+            </button>
+          </div>
+
           <div className={styles.comments}>
             <h3>Şərhlər</h3>
             <ul>
@@ -82,10 +116,24 @@ const dispatch = useDispatch()
                     </div>
                   )}
                   <p>{comment.content}</p>
+                  {(user.existUser && comment?.user && (user.existUser._id === comment?.user?._id || user?.existUser._id === post?.user?._id)) && (
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleCommentDelete(comment._id)}
+                    >
+                      Delete
+
+                    </button>
+                    
+                     
+                    
+                  )}
                 </li>
               ))}
             </ul>
-
+{
+  console.log(user)
+}
             <form onSubmit={handleCommentSubmit} className={styles.commentForm}>
               <input
                 type="text"

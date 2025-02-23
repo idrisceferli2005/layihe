@@ -31,17 +31,49 @@ const Hero = () => {
 
   const handleCommentSubmit = (postId) => {
     if (commentContent[postId]) {
-      dispatch(createComment({ postId, commentData: { content: commentContent[postId] } }));
-      setCommentContent((prev) => ({ ...prev, [postId]: "" }));
-      toast.success("Comment added successfully!");
+      dispatch(createComment({ postId, commentData: { content: commentContent[postId] } }))
+        .unwrap()
+        .then(({ postId, comment }) => {
+          // Şərh əlavə edildikdən sonra post obyektini yeniləyin
+          const updatedPosts = posts.map((post) => {
+            if (post._id === postId) {
+              return {
+                ...post,
+                comments: [...post.comments, comment],
+              };
+            }
+            return post;
+          });
+          setCommentContent((prev) => ({ ...prev, [postId]: "" }));
+          toast.success("Comment added successfully!");
+        })
+        .catch((error) => {
+          toast.error("Failed to add comment!");
+        });
     } else {
       toast.error("Comment cannot be empty!");
     }
   };
 
   const handleCommentDelete = (postId, commentId) => {
-    dispatch(deleteComment({ postId, commentId }));
-    toast.success("Comment deleted successfully!");
+    dispatch(deleteComment({ postId, commentId }))
+      .unwrap()
+      .then(({ postId, commentId }) => {
+      
+        const updatedPosts = posts.map((post) => {
+          if (post._id === postId) {
+            return {
+              ...post,
+              comments: post.comments.filter((comment) => comment._id !== commentId),
+            };
+          }
+          return post;
+        });
+        toast.success("Comment deleted successfully!");
+      })
+      .catch((error) => {
+        toast.error("Failed to delete comment!");
+      });
   };
 
   return (
@@ -76,14 +108,21 @@ const Hero = () => {
               <button className={styles.number} onClick={() => dispatch(dislikePost(post._id))}>
                 👎 {post?.dislikes?.length}
               </button>
-              <span>{post.likes?.length || 0} Likes</span>
             </div>
-            <ul className={styles.comments}>
+            <div className={styles.comments}>
               {post.comments && post.comments.length > 0 ? (
                 post.comments.map((comment, index) => (
-                  <li key={index}>
-                    {comment.content}
-                    {(user?.existUser?._id === comment?.user?._id || user?.existUser?._id === post?.user?._id) && (
+                  <div key={index} className={styles.commentItem}>
+                    <img
+                      src={comment?.user?.image || 'default-image.jpg'}
+                      alt={comment?.user?.username || "Unknown User"}
+                    />
+                    <div className={styles.commentContent}>
+                      <strong>{comment?.user?.username || "Unknown User"}</strong>
+                      <p>{comment.content}</p>
+                    </div>
+
+                    {(user.existUser && comment.user && (user.existUser._id === comment.user._id || user.existUser._id === post.user._id)) && (
                       <button
                         className="btn btn-danger"
                         onClick={() => handleCommentDelete(post._id, comment._id)}
@@ -91,14 +130,15 @@ const Hero = () => {
                         Delete
                       </button>
                     )}
-                  </li>
+                  </div>
                 ))
               ) : (
                 <p>No comments yet.</p>
               )}
-            </ul>
+            </div>
+
             <form
-              className={styles["comment-form"]}
+              className={styles.commentForm}
               onSubmit={(e) => {
                 e.preventDefault();
                 handleCommentSubmit(post._id);
@@ -109,6 +149,7 @@ const Hero = () => {
                 value={commentContent[post._id] || ""}
                 onChange={(e) => handleCommentChange(post._id, e.target.value)}
                 placeholder="Write a comment..."
+                className={styles.commentInput}
               />
               <button type="submit">
                 <FontAwesomeIcon icon={faComment} />

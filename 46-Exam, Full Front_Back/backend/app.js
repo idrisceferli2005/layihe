@@ -10,33 +10,12 @@ import profileRoutes from "./src/routes/profileRoutes.js";
 import postcommentRouter from "./src/routes/postCommentRoutes.js";
 import notificationRouter from "./src/routes/notificationRoutes.js";
 import searchRouter from "./src/routes/searchRoutes.js";
-import http from "http";
-import { Server } from "socket.io";
-import User from "./src/models/userModel.js";
 const port = process.env.PORT || 5001;
 const app = express();
-const server = http.createServer(app);
 
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:5173", // frontend ünvanı
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
-io.on("connection", (socket) => {
-  console.log("New client connected");
 
-  // Mesaj göndərildikdə
-  socket.on("sendMessage", (message) => {
-    io.emit("receiveMessage", message);  // Bütün istifadəçilərə mesaj göndəririk
-  });
 
-  // İstifadəçi çıxanda
-  socket.on("disconnect", () => { 
-    console.log("Client disconnected");
-  });
-});   
+
  
 app.use(express.json({ limit: "10mb" })); 
 app.use(express.urlencoded({ limit: "10mb", extended: true })); 

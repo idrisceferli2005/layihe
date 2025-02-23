@@ -50,7 +50,7 @@ export const createComment = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-      return response.data;
+      return { postId, comment: response.data };
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || "An error occurred");
     }
@@ -79,10 +79,8 @@ export const fetchUserPosts = createAsyncThunk(
   "posts/fetchUserPosts",
   async (userId, { getState, rejectWithValue }) => {
     try {
-     
       const response = await axios.get(`http://localhost:5000/api/posts/user/${userId}`, {
         withCredentials: true,
-  
       });
       return response.data;
     } catch (error) {
@@ -93,14 +91,11 @@ export const fetchUserPosts = createAsyncThunk(
 
 export const likePost = createAsyncThunk("posts/likePost", async (postId) => {
   const { data } = await axios.put(`http://localhost:5000/api/posts/like/${postId}`, {}, { withCredentials: true });
-  window.location.reload()
   return data;
 });
 
-
 export const dislikePost = createAsyncThunk("posts/dislikePost", async (postId) => {
   const { data } = await axios.put(`http://localhost:5000/api/posts/dislike/${postId}`, {}, { withCredentials: true });
-    window.location.reload()
   return data;
 });
 
@@ -178,9 +173,9 @@ const postSlice = createSlice({
       })
       .addCase(createComment.fulfilled, (state, action) => {
         state.loading = false;
-        const postIndex = state.posts.findIndex(post => post._id === action.meta.arg.postId);
+        const postIndex = state.posts.findIndex(post => post._id === action.payload.postId);
         if (postIndex !== -1) {
-          state.posts[postIndex].comments.push(action.payload);
+          state.posts[postIndex].comments.push(action.payload.comment);
         }
       })
       .addCase(createComment.rejected, (state, action) => {
@@ -208,5 +203,6 @@ const postSlice = createSlice({
       });
   },
 });
+
 export const { clearPosts } = postSlice.actions;
 export default postSlice.reducer;

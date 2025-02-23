@@ -52,9 +52,7 @@ const Navbar = () => {
             <Link to="/posts" className="navbar-item">
               <FaImage size={24} />
             </Link>
-            <Link to="/notifications" className="navbar-item">
-              <FaBell size={24} />
-            </Link>
+  
 
             
        
